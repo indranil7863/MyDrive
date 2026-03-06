@@ -64,6 +64,11 @@
     gap: 10px;
  }
 
+ .files-image{
+    width: 30px;
+    height: 30px;
+ }
+
  /* file-item */
 .file-item{
     width: 80%;
@@ -73,7 +78,7 @@
     align-items: center;
     border-radius: 5px;
     padding: 5px 8px;
-    background: #b2a4a4;
+    background: #f1ebeb;
     position: relative;
 }
 

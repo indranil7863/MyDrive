@@ -6,6 +6,7 @@ import {
   useParams,
 } from "react-router-dom";
 import menuIcon from "../assets/menu.png";
+import FileImage from "./FileImage";
 const ShowContent = () => {
   const { dirid } = useParams();
 
@@ -225,7 +226,11 @@ const ShowContent = () => {
       {data.files.map((file) => {
         return (
           <div key={file.id} className="file-item">
-            <p>{file.name}</p>
+            <div className="folder-img-name">
+              <FileImage filename={file.name} />
+              <p>{file.name}</p>
+            </div>
+
             {/* <Link to={`/files/${file.id}`}>Open</Link> */}
             <div onClick={() => toggleId(file.id)}>
               <svg
