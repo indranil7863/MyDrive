@@ -1,33 +1,36 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
-
+import { useState, useEffect } from "react";
 const FileContent = () => {
   const { fileid } = useParams();
+  const [file, setFile] = useState(null);
 
   useEffect(() => {
-    async function downloadFile() {
-      const res = await fetch(
-        "http://localhost:4000/files/" + fileid + "?action=download",
-      );
-
-      const blob = await res.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileid;
-
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      window.URL.revokeObjectURL(url);
+    async function loadFile() {
+      const res = await fetch(`http://localhost:4000/files/${fileid}`);
+      const data = await res.json();
+      setFile(data);
     }
 
-    downloadFile();
+    loadFile();
   }, [fileid]);
 
-  return <div>Downloading...</div>;
+  if (file.type.startsWith("image")) {
+    return <img src={url} width="400" />;
+  }
+
+  if (file.type.startsWith("video")) {
+    return <video src={url} controls width="500" />;
+  }
+
+  if (file.type.startsWith("audio")) {
+    return <audio src={url} controls />;
+  }
+
+  if (file.type === "application/pdf") {
+    return <iframe src={url} width="600" height="500"></iframe>;
+  }
+
+  return <p>Preview not supported</p>;
 };
 
 export default FileContent;
