@@ -1,28 +1,30 @@
-import React, { useEffect, useState } from "react";
-import {
-  Link,
-  UNSAFE_DataRouterContext,
-  useLoaderData,
-  useParams,
-} from "react-router-dom";
-import menuIcon from "../assets/menu.png";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
 import FileImage from "./FileImage";
 const ShowContent = () => {
   const { dirid } = useParams();
+
+  const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   const [data, setData] = useState({ files: [], directories: [] });
   const [isRename, setIsRename] = useState(false);
   const [newFileName, setNewFileName] = useState("");
   const [fileId, setFileId] = useState("");
   const [showMenu, setShowMenu] = useState("");
-  const [uploadFile, setUploadFile] = useState("");
+
   const [isCreatFolder, setIsCreateFolder] = useState(false);
   const [newFolderName, setNewFolderName] = useState("New Folder");
+  const [isRenameDir, setIsRenameDir] = useState(false);
+  const [renameDir, setRenameDir] = useState("");
+  const [dirIdRename, setDirIdRename] = useState("");
 
   function toggleId(fileid) {
     if (fileid === showMenu) {
       setShowMenu("");
     } else {
+      setShowMenu("");
       setShowMenu(fileid);
     }
   }
@@ -38,6 +40,7 @@ const ShowContent = () => {
     setNewFileName(oldfilename);
     setFileId(fileid);
     setIsRename(!isRename);
+    setShowMenu("");
   }
   async function SaveHandler() {
     setIsRename(!isRename);
@@ -64,6 +67,7 @@ const ShowContent = () => {
     });
     const data = await response.json();
     // re-render component
+    setShowMenu("");
     FetchData();
   }
 
@@ -144,9 +148,57 @@ const ShowContent = () => {
     }
   }
 
+  // directory rename
+  function DirectoryRename(dirid, dirname) {
+    setRenameDir(dirname);
+    setIsRenameDir((prev) => !prev);
+    setDirIdRename(dirid);
+    setShowMenu(false);
+  }
+
+  async function DirSaveHandler() {
+    setIsRenameDir((prev) => !prev);
+
+    // api call
+    const response = await fetch(
+      `http://127.0.0.1:4000/directory/${dirIdRename}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({
+          newdirname: renameDir,
+        }),
+      },
+    );
+    const data = await response.json();
+    if (data.status === 200) console.log("directory renamed");
+    // re-render compoentnt
+    FetchData();
+    setDirIdRename("");
+  }
+  // directory delete
+  async function DirDeleteHandler(DirId) {}
+  // open directory
+  function OpenDirectory(Dirid) {
+    navigate(`/directory/${Dirid}`);
+  }
+
   useEffect(() => {
     FetchData();
-  }, []);
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setShowMenu("");
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dirid]);
 
   return (
     <div className="main-file-container">
@@ -201,7 +253,10 @@ const ShowContent = () => {
       {data.directories.map((dir) => {
         return (
           <div key={dir.id} className="folder-item">
-            <div className="folder-img-name">
+            <div
+              onClick={() => OpenDirectory(dir.id)}
+              className="folder-img-name"
+            >
               <img
                 src="https://img.icons8.com/?size=100&id=74359&format=png&color=228BE6"
                 alt=""
@@ -209,7 +264,8 @@ const ShowContent = () => {
               />
               <p>{dir.name}</p>
             </div>
-            <div>
+
+            <div onClick={() => toggleId(dir.id)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="24px"
@@ -220,6 +276,22 @@ const ShowContent = () => {
                 <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
               </svg>
             </div>
+            {showMenu === dir.id && (
+              <div ref={menuRef} className="options-dropdown">
+                <button
+                  onClick={() => DirectoryRename(dir.id, dir.name)}
+                  className="rename-btn"
+                >
+                  rename
+                </button>
+                <button
+                  onClick={() => DirDeleteHandler(dir.id)}
+                  className="delete-btn"
+                >
+                  delete
+                </button>
+              </div>
+            )}
           </div>
         );
       })}
@@ -244,7 +316,7 @@ const ShowContent = () => {
               </svg>
             </div>
             {showMenu === file.id && (
-              <div className="options-dropdown">
+              <div ref={menuRef} className="options-dropdown">
                 <button
                   className="download-btn"
                   onClick={() => DownloadHandler(file.id, file.name)}
@@ -277,6 +349,17 @@ const ShowContent = () => {
             onChange={(e) => setNewFileName(e.target.value)}
           />
           <button onClick={SaveHandler}>Save</button>
+        </div>
+      )}
+      {isRenameDir && (
+        <div className="dialog-box">
+          Re-Name:{" "}
+          <input
+            type="text"
+            value={renameDir}
+            onChange={(e) => setRenameDir(e.target.value)}
+          />
+          <button onClick={DirSaveHandler}>Save</button>
         </div>
       )}
     </div>
