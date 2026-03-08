@@ -183,7 +183,17 @@ const ShowContent = () => {
     setDirIdRename("");
   }
   // directory delete
-  async function DirDeleteHandler(DirId) {}
+  async function DirDeleteHandler(DirId) {
+    const res = await fetch(`http://localhost:4000/directory/${DirId}`, {
+      method: "DELETE",
+    });
+    if (res.status === 200) {
+      alert("Folder deleted Successfully");
+      FetchData();
+    } else {
+      alert("unable to delete Folder!");
+    }
+  }
   // open directory
   function OpenDirectory(Dirid) {
     navigate(`/directory/${Dirid}`);
