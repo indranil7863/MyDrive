@@ -3,7 +3,10 @@ import { Outlet } from "react-router-dom";
 const HomeLayout = () => {
   return (
     <div>
-      <h2>My Drive</h2>
+      <div className="nav-bar">
+        <h2>My Drive</h2>
+      </div>
+
       <Outlet />
     </div>
   );
