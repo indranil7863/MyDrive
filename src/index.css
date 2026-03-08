@@ -18,6 +18,7 @@
     position: absolute;
     left: 50%;
     top: 50%;
+    background-color: #e4e1e1;
     transform: translate(-50%, -50%);
 
 }
@@ -200,8 +201,9 @@
     border-radius: 5px;
     outline: none;
     border: 1px solid rgb(215, 197, 197);
-    gap: 6px;
-    z-index: 5;
+    gap: 20px;
+    z-index: 10;
+    background-color: #f5e0e0;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
     transform-origin: top left;
    animation: zoomOut .6s ease-in-out 0s 1;
@@ -220,10 +222,10 @@
     }
 }
 .set-foldername input[type="text"]{
-    padding: 6px 5px;
+    padding: 6px 8px;
     border: none;
     outline: none;
-    background-color: #f5e0e0;
+    background-color: #eacccc;
 }
 .set-foldername div{
     display: flex;

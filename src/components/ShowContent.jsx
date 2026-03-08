@@ -20,6 +20,9 @@ const ShowContent = () => {
   const [renameDir, setRenameDir] = useState("");
   const [dirIdRename, setDirIdRename] = useState("");
 
+  // const [editing, setEditing] = useState(true);
+  const inputRef = useRef(null);
+
   function toggleId(fileid) {
     if (fileid === showMenu) {
       setShowMenu("");
@@ -143,6 +146,7 @@ const ShowContent = () => {
     if (res.status === 200) {
       // fetch updated data again
       FetchData();
+      setNewFolderName("New Folder");
     } else {
       console.log("Folder is not created!");
     }
@@ -187,6 +191,19 @@ const ShowContent = () => {
 
   useEffect(() => {
     FetchData();
+    if (isCreatFolder) {
+      inputRef.current.select();
+    }
+    if (isRenameDir) {
+      inputRef.current.select();
+    }
+    if (isRename) {
+      const fileName = newFileName.split(".")[0];
+      inputRef.current.focus();
+
+      inputRef.current.setSelectionRange(0, fileName.length);
+    }
+
     const handleClickOutside = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setShowMenu("");
@@ -198,7 +215,7 @@ const ShowContent = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [dirid]);
+  }, [dirid, isCreatFolder, isRename, isRenameDir]);
 
   return (
     <div className="main-file-container">
@@ -235,6 +252,7 @@ const ShowContent = () => {
           <input
             type="text"
             value={newFolderName}
+            ref={inputRef}
             onChange={(e) => setNewFolderName(e.target.value)}
           />
           <div>
@@ -344,6 +362,7 @@ const ShowContent = () => {
         <div className="dialog-box">
           Re-Name:{" "}
           <input
+            ref={inputRef}
             type="text"
             value={newFileName}
             onChange={(e) => setNewFileName(e.target.value)}
@@ -355,6 +374,7 @@ const ShowContent = () => {
         <div className="dialog-box">
           Re-Name:{" "}
           <input
+            ref={inputRef}
             type="text"
             value={renameDir}
             onChange={(e) => setRenameDir(e.target.value)}
