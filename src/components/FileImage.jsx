@@ -85,7 +85,7 @@ const FileImage = ({ filename }) => {
   else if (["ppt", "pptx"].includes(filetype)) {
     return (
       <img
-        src="https://img.icons8.com/?size=100&id=undefined&format=png&color=000000"
+        src="https://img.icons8.com/?size=100&id=13625&format=png&color=000000"
         alt="powerpoint"
         className="files-image"
       />
@@ -96,7 +96,7 @@ const FileImage = ({ filename }) => {
   else if (["zip", "rar", "7z", "tar", "gz"].includes(filetype)) {
     return (
       <img
-        src="https://img.icons8.com/?size=100&id=undefined&format=png&color=000000"
+        src="https://img.icons8.com/?size=100&id=312&format=png&color=000000"
         alt="archive"
         className="files-image"
       />

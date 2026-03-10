@@ -259,6 +259,14 @@ const ShowContent = () => {
           </button>
         </div>
       </div>
+      {!data.files.length && !data.directories.length && (
+        <div className="blank-message">
+          <p>
+            No files are uploaded here. upload your desired files and create
+            directories.
+          </p>
+        </div>
+      )}
       {isCreatFolder && (
         <div className="set-foldername">
           <input
@@ -292,7 +300,7 @@ const ShowContent = () => {
                 alt=""
                 className="folder-img"
               />
-              <p>{dir.name}</p>
+              <p className="dir-name">{dir.name}</p>
             </div>
 
             <div onClick={() => toggleId(dir.id)}>
@@ -330,7 +338,7 @@ const ShowContent = () => {
           <div key={file.id} className="file-item">
             <div className="folder-img-name">
               <FileImage filename={file.name} />
-              <p>{file.name}</p>
+              <p className="file-name">{file.name}</p>
             </div>
 
             {/* <Link to={`/files/${file.id}`}>Open</Link> */}
