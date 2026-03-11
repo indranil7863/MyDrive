@@ -5,6 +5,7 @@ const DirectoryLayout = () => {
   return (
     <div>
       {/* <h1>THis is directory layout</h1> */}
+
       <Outlet />
     </div>
   );

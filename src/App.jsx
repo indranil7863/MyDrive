@@ -3,18 +3,21 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
+  Router,
   RouterProvider,
 } from "react-router-dom";
 import HomeLayout from "./layouts/HomeLayout";
 import ShowContent from "./components/ShowContent";
 import DirectoryLayout from "./layouts/DirectoryLayout";
 import FileContent from "./components/FileContent";
+import Register from "./components/Register";
 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<HomeLayout />}>
         <Route index element={<ShowContent />} />
+        <Route path="register" element={<Register />} />
         <Route path="directory" element={<DirectoryLayout />}>
           <Route path=":dirid" element={<ShowContent />} />
         </Route>
