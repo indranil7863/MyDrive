@@ -79,7 +79,9 @@ const ShowContent = () => {
     const response = await fetch(url + `/${dirid ? dirid : ""}`);
     const data = await response.json();
     console.log("show-data", data);
-
+    if (response.status !== 200) {
+      navigate("/register");
+    }
     setData(data);
   }
 
