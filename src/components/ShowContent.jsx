@@ -49,6 +49,7 @@ const ShowContent = () => {
     setIsRename(!isRename);
     // api call
     const response = await fetch(`http://127.0.0.1:4000/files/${fileId}`, {
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -67,6 +68,7 @@ const ShowContent = () => {
   async function DeleteHandler(fileid) {
     const response = await fetch(`http://localhost:4000/files/${fileid}`, {
       method: "DELETE",
+      credentials: "include",
     });
     const data = await response.json();
     // re-render component
@@ -76,7 +78,9 @@ const ShowContent = () => {
 
   async function FetchData() {
     const url = "http://localhost:4000/directory";
-    const response = await fetch(url + `/${dirid ? dirid : ""}`);
+    const response = await fetch(url + `/${dirid ? dirid : ""}`, {
+      credentials: "include",
+    });
     const data = await response.json();
     console.log("show-data", data);
     if (response.status !== 200) {
@@ -107,6 +111,7 @@ const ShowContent = () => {
     const File = e.target.files[0];
 
     const xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
     xhr.open("POST", `http://localhost:4000/files/${File.name}`);
     xhr.setRequestHeader("parentdirid", dirid);
     xhr.upload.onprogress = (event) => {
@@ -139,6 +144,7 @@ const ShowContent = () => {
     setIsCreateFolder((prev) => !prev);
     // api call
     const res = await fetch(`http://localhost:4000/directory/`, {
+      credentials: "include",
       headers: {
         parentdirid: dirid,
         dirname: newFolderName,
@@ -167,8 +173,9 @@ const ShowContent = () => {
 
     // api call
     const response = await fetch(
-      `http://127.0.0.1:4000/directory/${dirIdRename}`,
+      `http://localhost:4000/directory/${dirIdRename}`,
       {
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -178,8 +185,8 @@ const ShowContent = () => {
         }),
       },
     );
-    const data = await response.json();
-    if (data.status === 200) console.log("directory renamed");
+
+    if (response.status === 200) console.log("directory renamed");
     // re-render compoentnt
     FetchData();
     setDirIdRename("");
@@ -187,6 +194,7 @@ const ShowContent = () => {
   // directory delete
   async function DirDeleteHandler(DirId) {
     const res = await fetch(`http://localhost:4000/directory/${DirId}`, {
+      credentials: "include",
       method: "DELETE",
     });
     if (res.status === 200) {

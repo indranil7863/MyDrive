@@ -28,6 +28,7 @@ const Register = () => {
       // sign in
       const response = await fetch(`http://localhost:4000/user/signin`, {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify({
           email: inputData.email,
           password: inputData.password,
@@ -48,6 +49,7 @@ const Register = () => {
       // registration
       const response = await fetch(`http://localhost:4000/user/register`, {
         method: "POST",
+        credentials: "include",
         body: JSON.stringify(inputData),
         headers: {
           "Content-Type": "application/json",
