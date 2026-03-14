@@ -151,6 +151,7 @@ const ShowContent = () => {
       },
       method: "POST",
     });
+    console.log(dirid);
     if (res.status === 200) {
       // fetch updated data again
       FetchData();
