@@ -195,12 +195,34 @@
     margin: auto;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    /* justify-content: flex-start; */
+    justify-content: space-between;
     align-items: center;
     gap: 15px;
-    margin-bottom: 10px;
-    padding: 10px 0px;
+    padding: 8px 0px;
     background-color: #f1ebeb;
+}
+.banner-firstdiv{
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 20px;
+}
+
+.profile-imgcontainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+.profile-imgcontainer img{
+  width: 50px;
+  height: 50px;
+  
+  border-radius: 50%;
 }
 .wrapper-banner-section{
     width: 100%;

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import profilepic from "../assets/user.png";
 
 import FileImage from "./FileImage";
 const ShowContent = () => {
@@ -242,32 +243,39 @@ const ShowContent = () => {
     <div className="main-file-container">
       <div className="wrapper-banner-section">
         <div className="banner-section">
-          <label htmlFor="fileupload">
-            <div className="upload-file">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-upload"
-                viewBox="0 0 16 16"
-              >
-                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
-              </svg>
-              <span>Upload</span>
+          <div className="banner-firstdiv">
+            <label htmlFor="fileupload">
+              <div className="upload-file">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  fill="currentColor"
+                  class="bi bi-upload"
+                  viewBox="0 0 16 16"
+                >
+                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                  <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                </svg>
+                <span>Upload</span>
+              </div>
+              <input
+                onChange={UploadFileHandler}
+                type="file"
+                id="fileupload"
+                style={{ display: "none" }}
+              />
+            </label>
+            <button onClick={CreateDirectroyHandler} className="create-folder">
+              <span class="material-symbols-outlined">create_new_folder</span>
+              <span>Create Folder</span>
+            </button>
+          </div>
+          <Link to="/profile" className="profile-wrapper">
+            <div className="profile-imgcontainer">
+              <img src={profilepic} alt="image" title="profile" />
             </div>
-            <input
-              onChange={UploadFileHandler}
-              type="file"
-              id="fileupload"
-              style={{ display: "none" }}
-            />
-          </label>
-          <button onClick={CreateDirectroyHandler} className="create-folder">
-            <span class="material-symbols-outlined">create_new_folder</span>
-            <span>Create Folder</span>
-          </button>
+          </Link>
         </div>
       </div>
       {!data.files.length && !data.directories.length && (

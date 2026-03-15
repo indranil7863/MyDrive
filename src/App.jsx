@@ -11,12 +11,14 @@ import ShowContent from "./components/ShowContent";
 import DirectoryLayout from "./layouts/DirectoryLayout";
 import FileContent from "./components/FileContent";
 import Register from "./components/Register";
+import Profile from "./components/Profile";
 
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route path="/" element={<HomeLayout />}>
         <Route index element={<ShowContent />} />
+        <Route path="profile" element={<Profile />} />
         <Route path="register" element={<Register />} />
         <Route path="directory" element={<DirectoryLayout />}>
           <Route path=":dirid" element={<ShowContent />} />
