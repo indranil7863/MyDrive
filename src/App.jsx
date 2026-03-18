@@ -3,13 +3,12 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
-  Router,
   RouterProvider,
 } from "react-router-dom";
 import HomeLayout from "./layouts/HomeLayout";
 import ShowContent from "./components/ShowContent";
 import DirectoryLayout from "./layouts/DirectoryLayout";
-import FileContent from "./components/FileContent";
+
 import Register from "./components/Register";
 import Profile from "./components/Profile";
 
@@ -22,10 +21,6 @@ const App = () => {
         <Route path="register" element={<Register />} />
         <Route path="directory" element={<DirectoryLayout />}>
           <Route path=":dirid" element={<ShowContent />} />
-        </Route>
-        <Route path="files">
-          <Route path=":fileid" element={<FileContent />} />
-          {/* <Route path="rename/:fileid" element={<RenameFile />} /> */}
         </Route>
       </Route>,
     ),
