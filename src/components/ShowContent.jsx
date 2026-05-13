@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import profilepic from "../assets/user.png";
 
 import FileImage from "./FileImage";
+import FileView from "./FileView";
 const ShowContent = () => {
   const { dirid } = useParams();
 
@@ -49,7 +50,7 @@ const ShowContent = () => {
   async function SaveHandler() {
     setIsRename(!isRename);
     // api call
-    const response = await fetch(`http://127.0.0.1:4000/files/${fileId}`, {
+    const response = await fetch(`http://localhost:4000/files/${fileId}`, {
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
@@ -70,8 +71,11 @@ const ShowContent = () => {
     const response = await fetch(`http://localhost:4000/files/${fileid}`, {
       method: "DELETE",
       credentials: "include",
+      headers:{
+        "Content-Type": "application/json"
+      }
     });
-    const data = await response.json();
+    
     // re-render component
     setShowMenu("");
     FetchData();
@@ -92,7 +96,12 @@ const ShowContent = () => {
 
   async function DownloadHandler(fileid, filename) {
     const res = await fetch(
-      "http://localhost:4000/files/" + fileid + "?action=download",
+      "http://localhost:4000/files/" + fileid + "?action=download",{
+        credentials: "include",
+        headers:{
+          "Content-Type": "application/json"
+        }
+      }
     );
 
     const blob = await res.blob();
@@ -166,6 +175,7 @@ const ShowContent = () => {
   function DirectoryRename(dirid, dirname) {
     setRenameDir(dirname);
     setIsRenameDir((prev) => !prev);
+    console.log("dirid: ", dirid);
     setDirIdRename(dirid);
     setShowMenu(false);
   }
@@ -174,6 +184,7 @@ const ShowContent = () => {
     setIsRenameDir((prev) => !prev);
 
     // api call
+    console.log("dirIdRename: ", dirIdRename);
     const response = await fetch(
       `http://localhost:4000/directory/${dirIdRename}`,
       {
@@ -238,6 +249,8 @@ const ShowContent = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dirid, isCreatFolder, isRename, isRenameDir]);
+
+  const [selectFileId, setSelectFileId] = useState(null);
 
   return (
     <div className="main-file-container">
@@ -309,9 +322,9 @@ const ShowContent = () => {
       )}
       {data.directories.map((dir) => {
         return (
-          <div key={dir.id} className="folder-item">
+          <div key={dir._id} className="folder-item">
             <div
-              onClick={() => OpenDirectory(dir.id)}
+              onClick={() => OpenDirectory(dir._id)}
               className="folder-img-name"
             >
               <img
@@ -319,10 +332,10 @@ const ShowContent = () => {
                 alt=""
                 className="folder-img"
               />
-              <p className="dir-name">{dir.name}</p>
+              <p className="dir-name">{dir.dirname}</p>
             </div>
 
-            <div onClick={() => toggleId(dir.id)}>
+            <div onClick={() => toggleId(dir._id)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="24px"
@@ -333,16 +346,16 @@ const ShowContent = () => {
                 <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
               </svg>
             </div>
-            {showMenu === dir.id && (
+            {showMenu === dir._id && (
               <div ref={menuRef} className="options-dropdown">
                 <button
-                  onClick={() => DirectoryRename(dir.id, dir.name)}
+                  onClick={() => DirectoryRename(dir._id, dir.dirname)}
                   className="rename-btn"
                 >
                   rename
                 </button>
                 <button
-                  onClick={() => DirDeleteHandler(dir.id)}
+                  onClick={() => DirDeleteHandler(dir._id)}
                   className="delete-btn"
                 >
                   delete
@@ -354,14 +367,14 @@ const ShowContent = () => {
       })}
       {data.files.map((file) => {
         return (
-          <div key={file.id} className="file-item">
-            <div className="folder-img-name">
-              <FileImage filename={file.name} />
-              <p className="file-name">{file.name}</p>
+          <div key={file._id} className="file-item">
+            <div className="folder-img-name" onClick={()=> navigate(`/file/${file._id}`, { state: file})}>
+              <FileImage filename={file.fileName} />
+              <p className="file-name">{file.fileName}</p>
             </div>
 
             {/* <Link to={`/files/${file.id}`}>Open</Link> */}
-            <div onClick={() => toggleId(file.id)}>
+            <div onClick={() => toggleId(file._id)}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="24px"
@@ -372,23 +385,23 @@ const ShowContent = () => {
                 <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
               </svg>
             </div>
-            {showMenu === file.id && (
+            {showMenu === file._id && (
               <div ref={menuRef} className="options-dropdown">
                 <button
                   className="download-btn"
-                  onClick={() => DownloadHandler(file.id, file.name)}
+                  onClick={() => DownloadHandler(file._id, file.fileName)}
                 >
                   Download
                 </button>
                 <button
                   className="rename-btn"
-                  onClick={() => RenameHandler(file.name, file.id)}
+                  onClick={() => RenameHandler(file.fileName, file._id)}
                 >
                   Rename
                 </button>
                 <button
                   className="delete-btn"
-                  onClick={() => DeleteHandler(file.id)}
+                  onClick={() => DeleteHandler(file._id)}
                 >
                   Delete
                 </button>
@@ -397,6 +410,7 @@ const ShowContent = () => {
           </div>
         );
       })}
+      
       {isRename && (
         <div className="dialog-box">
           Re-Name:{" "}

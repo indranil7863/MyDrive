@@ -471,3 +471,12 @@
    .error-message{
     color: rgb(255, 0, 234);
    }
+
+   /* center a div */
+   .center-div{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(44, 43, 43);
+   }

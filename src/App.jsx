@@ -11,6 +11,7 @@ import DirectoryLayout from "./layouts/DirectoryLayout";
 
 import Register from "./components/Register";
 import Profile from "./components/Profile";
+import FileView from "./components/FileView";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -19,6 +20,7 @@ const App = () => {
         <Route index element={<ShowContent />} />
         <Route path="profile" element={<Profile />} />
         <Route path="register" element={<Register />} />
+        <Route path="file/:id" element={<FileView/>} />
         <Route path="directory" element={<DirectoryLayout />}>
           <Route path=":dirid" element={<ShowContent />} />
         </Route>
