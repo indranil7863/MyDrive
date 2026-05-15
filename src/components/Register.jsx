@@ -57,7 +57,8 @@ const Register = () => {
       });
       const data = await response.json();
       if (response.status === 200) {
-        toggleHandler();
+        // toggleHandler();
+        navigate('/verify');
       } else {
         setErrorData(data.error);
         console.log(data);
