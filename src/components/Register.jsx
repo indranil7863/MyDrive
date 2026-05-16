@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -20,6 +21,8 @@ const Register = () => {
   function forgetPasswordHandler() {
     // call forget password api
   }
+
+
   async function SingupHandler(e) {
     e.preventDefault();
     console.log(inputData);
@@ -40,10 +43,11 @@ const Register = () => {
       const data = await response.json();
 
       if (response.status === 200) {
-        navigate("/");
+        toast.success("successful Login!")
+        navigate("/", {replace: true});
       } else {
         setErrorData(data.message);
-        console.log("Login failed!", errorData);
+        toast.error("Login failed!")
       }
     } else {
       // registration
@@ -57,12 +61,10 @@ const Register = () => {
       });
       const data = await response.json();
       if (response.status === 200) {
-        // toggleHandler();
         navigate('/verify');
       } else {
         setErrorData(data.error);
-        console.log(data);
-        console.log("Registration failed!");
+        toast.error(errorData);
       }
     }
   }

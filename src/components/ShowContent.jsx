@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import profilepic from "../assets/user.png";
 import FileImage from "./FileImage";
+import { toast } from 'react-toastify';
 
 const ShowContent = () => {
   const { dirid } = useParams();
@@ -34,9 +35,13 @@ const ShowContent = () => {
   }
 
   async function FileOpen(fileid) {
-    const url = "http://localhost:4000/files/";
-    const res = await fetch(url + fileid);
-    console.log(res.blob());
+    try {
+      const url = "http://localhost:4000/files/";
+      const res = await fetch(url + fileid);
+
+    } catch (error) {
+      toast.error("network error!")
+    }
   }
 
   // file rename
@@ -49,58 +54,81 @@ const ShowContent = () => {
   async function SaveHandler() {
     setIsRename(!isRename);
     // api call
-    const response = await fetch(`http://localhost:4000/files/${fileId}`, {
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PATCH",
-      body: JSON.stringify({
-        newfilename: newFileName,
-      }),
-    });
-    const data = await response.json();
-    if (data.status === 200) console.log("file renamed");
+    try {
+      const response = await fetch(`http://localhost:4000/files/${fileId}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PATCH",
+        body: JSON.stringify({
+          newfilename: newFileName,
+        }),
+      });
+
+      if (response.status === 200) {
+        toast.success("file renamed");
+      } else {
+        toast.error("unable to rename file!")
+      }
+    } catch (error) {
+      toast.error("network error!")
+    }
     // re-render compoentnt
     FetchData();
     setNewFileName("");
   }
   // file delete
   async function DeleteHandler(fileid) {
-    const response = await fetch(`http://localhost:4000/files/${fileid}`, {
-      method: "DELETE",
-      credentials: "include",
-      headers:{
-        "Content-Type": "application/json"
+    try {
+      const response = await fetch(`http://localhost:4000/files/${fileid}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+
+      if (response.status === 200) {
+        toast.success("file deleted!")
+      } else {
+        toast.error("unable to delete the file!")
       }
-    });
-    
+    } catch (error) {
+      toast.error("network error!")
+    }
+
     // re-render component
     setShowMenu("");
     FetchData();
   }
 
   async function FetchData() {
-    const url = "http://localhost:4000/directory";
-    const response = await fetch(url + `/${dirid ? dirid : ""}`, {
-      credentials: "include",
-    });
-    const data = await response.json();
-    console.log("show-data", data);
-    if (response.status !== 200) {
-      navigate("/register");
+    try {
+      const url = "http://localhost:4000/directory";
+      const response = await fetch(url + `/${dirid ? dirid : ""}`, {
+        credentials: "include",
+      });
+      const data = await response.json();
+      console.log("show-data", data);
+      if (response.status !== 200) {
+        navigate("/register");
+        toast.error("You are not logged in!")
+      }
+      setData(data);
+    } catch (error) {
+      toast.error("network error!")
     }
-    setData(data);
   }
 
   async function DownloadHandler(fileid, filename) {
     const res = await fetch(
-      "http://localhost:4000/files/" + fileid + "?action=download",{
-        credentials: "include",
-        headers:{
-          "Content-Type": "application/json"
-        }
+      "http://localhost:4000/files/" + fileid + "?action=download", {
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
       }
+    }
     );
 
     const blob = await res.blob();
@@ -115,6 +143,8 @@ const ShowContent = () => {
     a.remove();
     window.URL.revokeObjectURL(url);
   }
+
+  const [progress, setProgress] = useState(0);
   // file upload
   function UploadFileHandler(e) {
     const File = e.target.files[0];
@@ -125,23 +155,26 @@ const ShowContent = () => {
     xhr.setRequestHeader("parentdirid", dirid);
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
-        const percent = (event.loaded / event.total) * 100;
+        const percent = Math.floor((event.loaded / event.total) * 100)
         console.log(percent);
+        setProgress(Number(percent));
       }
     };
     xhr.onload = function () {
       if (xhr.status === 200) {
-        console.log("successfully uploaded!");
-        alert("successfully uploaded!");
+        setProgress(0);
+        toast.success("Successfully uploaded!")
+
         // fetch data
         FetchData();
       }
     };
     xhr.onerror = function () {
-      console.log("network error!!");
+      toast.error("network error!")
     };
     xhr.send(File);
   }
+  console.log("progress: ", progress);
 
   // directory creation
   function CreateDirectroyHandler() {
@@ -152,21 +185,26 @@ const ShowContent = () => {
   async function SaveDirectoryHandler() {
     setIsCreateFolder((prev) => !prev);
     // api call
-    const res = await fetch(`http://localhost:4000/directory/`, {
-      credentials: "include",
-      headers: {
-        parentdirid: dirid,
-        dirname: newFolderName,
-      },
-      method: "POST",
-    });
-    console.log(dirid);
-    if (res.status === 200) {
-      // fetch updated data again
-      FetchData();
-      setNewFolderName("New Folder");
-    } else {
-      console.log("Folder is not created!");
+    try {
+      const res = await fetch(`http://localhost:4000/directory/`, {
+        credentials: "include",
+        headers: {
+          parentdirid: dirid,
+          dirname: newFolderName,
+        },
+        method: "POST",
+      });
+      console.log(dirid);
+      if (res.status === 200) {
+        toast.success(`${newFolderName} folder created!`)
+        // fetch updated data again
+        FetchData();
+        setNewFolderName("New Folder");
+      } else {
+        toast.error("Folder is not created!")
+      }
+    } catch (error) {
+      toast.error("network error!")
     }
   }
 
@@ -181,41 +219,55 @@ const ShowContent = () => {
 
   async function DirSaveHandler() {
     setIsRenameDir((prev) => !prev);
-
     // api call
-    console.log("dirIdRename: ", dirIdRename);
-    const response = await fetch(
-      `http://localhost:4000/directory/${dirIdRename}`,
-      {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+    // console.log("dirIdRename: ", dirIdRename);
+    try {
+      const response = await fetch(
+        `http://localhost:4000/directory/${dirIdRename}`,
+        {
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "PATCH",
+          body: JSON.stringify({
+            newdirname: renameDir,
+          }),
         },
-        method: "PATCH",
-        body: JSON.stringify({
-          newdirname: renameDir,
-        }),
-      },
-    );
+      );
 
-    if (response.status === 200) console.log("directory renamed");
+      if (response.status === 200) {
+        toast.success("directory renamed!")
+      } else {
+        toast.error("unable to rename!")
+      }
+    } catch (error) {
+      toast.error("network error!")
+    }
     // re-render compoentnt
     FetchData();
     setDirIdRename("");
   }
+
+
   // directory delete
   async function DirDeleteHandler(DirId) {
-    const res = await fetch(`http://localhost:4000/directory/${DirId}`, {
+    try {
+      const res = await fetch(`http://localhost:4000/directory/${DirId}`, {
       credentials: "include",
       method: "DELETE",
     });
     if (res.status === 200) {
-      alert("Folder deleted Successfully");
+      toast.success("directory deleted!");
       FetchData();
     } else {
-      alert("unable to delete Folder!");
+      toast.error("unable to delete Folder!")
+    }
+    } catch (error) {
+      toast.error("network error!");
     }
   }
+
   // open directory
   function OpenDirectory(Dirid) {
     navigate(`/directory/${Dirid}`);
@@ -249,7 +301,6 @@ const ShowContent = () => {
     };
   }, [dirid, isCreatFolder, isRename, isRenameDir]);
 
-  const [selectFileId, setSelectFileId] = useState(null);
 
   return (
     <div className="main-file-container">
@@ -289,7 +340,9 @@ const ShowContent = () => {
             </div>
           </Link>
         </div>
+        <div className="progress-bar" style={{ width: `${progress}%` }}></div>
       </div>
+
       {!data.files.length && !data.directories.length && (
         <div className="blank-message">
           <p>
@@ -367,7 +420,7 @@ const ShowContent = () => {
       {data.files.map((file) => {
         return (
           <div key={file._id} className="file-item">
-            <div className="folder-img-name" onClick={()=> navigate(`/file/${file._id}`, { state: file})}>
+            <div className="folder-img-name" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
               <FileImage filename={file.fileName} />
               <p className="file-name">{file.fileName}</p>
             </div>
@@ -409,7 +462,7 @@ const ShowContent = () => {
           </div>
         );
       })}
-      
+
       {isRename && (
         <div className="dialog-box">
           Re-Name:{" "}

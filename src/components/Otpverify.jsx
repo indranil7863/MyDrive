@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import './Otpverify.css';
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Otpverify() {
     const navigate = useNavigate();
@@ -39,11 +40,16 @@ function Otpverify() {
             console.log(verification);
 
             if (verification.status === 200) {
+                toast.success("successfully Registered!")
                 navigate("/register");
+            }
+            else {
+                toast.error("Failed to register!")
             }
 
         } catch (error) {
             console.log("Error: ", error.message);
+            toast.error(error.message);
         }
 
     }
