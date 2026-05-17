@@ -1,12 +1,15 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+
+
 const FileContent = () => {
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
   const { fileid } = useParams();
   const [file, setFile] = useState(null);
 
   useEffect(() => {
     async function loadFile() {
-      const res = await fetch(`http://localhost:4000/files/${fileid}`);
+      const res = await fetch(`${backend_url}/files/${fileid}`);
       const data = await res.json();
       setFile(data);
     }

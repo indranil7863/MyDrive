@@ -4,7 +4,9 @@ import profilepic from "../assets/user.png";
 import FileImage from "./FileImage";
 import { toast } from 'react-toastify';
 
+
 const ShowContent = () => {
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
   const { dirid } = useParams();
 
   const menuRef = useRef(null);
@@ -36,9 +38,11 @@ const ShowContent = () => {
 
   async function FileOpen(fileid) {
     try {
-      const url = "http://localhost:4000/files/";
+      const url = `${backend_url}/files/`;
       const res = await fetch(url + fileid);
-
+      if (res.status !== 200) {
+        toast.error("This is can't be opened!")
+      }
     } catch (error) {
       toast.error("network error!")
     }
@@ -51,11 +55,12 @@ const ShowContent = () => {
     setIsRename(!isRename);
     setShowMenu("");
   }
+
   async function SaveHandler() {
     setIsRename(!isRename);
     // api call
     try {
-      const response = await fetch(`http://localhost:4000/files/${fileId}`, {
+      const response = await fetch(`${backend_url}/files/${fileId}`, {
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
@@ -78,10 +83,11 @@ const ShowContent = () => {
     FetchData();
     setNewFileName("");
   }
+
   // file delete
   async function DeleteHandler(fileid) {
     try {
-      const response = await fetch(`http://localhost:4000/files/${fileid}`, {
+      const response = await fetch(`${backend_url}/files/${fileid}`, {
         method: "DELETE",
         credentials: "include",
         headers: {
@@ -105,7 +111,7 @@ const ShowContent = () => {
 
   async function FetchData() {
     try {
-      const url = "http://localhost:4000/directory";
+      const url = `${backend_url}/directory`;
       const response = await fetch(url + `/${dirid ? dirid : ""}`, {
         credentials: "include",
       });
@@ -123,7 +129,7 @@ const ShowContent = () => {
 
   async function DownloadHandler(fileid, filename) {
     const res = await fetch(
-      "http://localhost:4000/files/" + fileid + "?action=download", {
+      `${backend_url}/files/` + fileid + "?action=download", {
       credentials: "include",
       headers: {
         "Content-Type": "application/json"
@@ -151,7 +157,7 @@ const ShowContent = () => {
 
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
-    xhr.open("POST", `http://localhost:4000/files/${File.name}`);
+    xhr.open("POST", `${backend_url}/files/${File.name}`);
     xhr.setRequestHeader("parentdirid", dirid);
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
@@ -174,7 +180,7 @@ const ShowContent = () => {
     };
     xhr.send(File);
   }
-  console.log("progress: ", progress);
+
 
   // directory creation
   function CreateDirectroyHandler() {
@@ -186,7 +192,7 @@ const ShowContent = () => {
     setIsCreateFolder((prev) => !prev);
     // api call
     try {
-      const res = await fetch(`http://localhost:4000/directory/`, {
+      const res = await fetch(`${backend_url}/directory/`, {
         credentials: "include",
         headers: {
           parentdirid: dirid,
@@ -194,7 +200,7 @@ const ShowContent = () => {
         },
         method: "POST",
       });
-      console.log(dirid);
+
       if (res.status === 200) {
         toast.success(`${newFolderName} folder created!`)
         // fetch updated data again
@@ -223,7 +229,7 @@ const ShowContent = () => {
     // console.log("dirIdRename: ", dirIdRename);
     try {
       const response = await fetch(
-        `http://localhost:4000/directory/${dirIdRename}`,
+        `${backend_url}/directory/${dirIdRename}`,
         {
           credentials: "include",
           headers: {
@@ -253,16 +259,16 @@ const ShowContent = () => {
   // directory delete
   async function DirDeleteHandler(DirId) {
     try {
-      const res = await fetch(`http://localhost:4000/directory/${DirId}`, {
-      credentials: "include",
-      method: "DELETE",
-    });
-    if (res.status === 200) {
-      toast.success("directory deleted!");
-      FetchData();
-    } else {
-      toast.error("unable to delete Folder!")
-    }
+      const res = await fetch(`${backend_url}/directory/${DirId}`, {
+        credentials: "include",
+        method: "DELETE",
+      });
+      if (res.status === 200) {
+        toast.success("directory deleted!");
+        FetchData();
+      } else {
+        toast.error("unable to delete Folder!")
+      }
     } catch (error) {
       toast.error("network error!");
     }

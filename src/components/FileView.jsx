@@ -1,8 +1,10 @@
 import { useLocation } from "react-router-dom";
 
+
 function FileView() {
+    const backend_url = import.meta.env.VITE_BACKEND_URL;
     const {state} = useLocation();
-    const url = `http://localhost:4000/files/${state._id}`
+    const url = `${backend_url}/files/${state._id}`
     
     const fileType = state.fileType;
     if(fileType.startsWith("image/")){

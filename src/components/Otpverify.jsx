@@ -3,7 +3,9 @@ import './Otpverify.css';
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+
 function Otpverify() {
+    const backend_url = import.meta.env.VITE_BACKEND_URL;
     const navigate = useNavigate();
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
@@ -29,7 +31,7 @@ function Otpverify() {
         const finalOtp = otp.join("");
         // api call
         try {
-            const verification = await fetch("http://localhost:4000/user/verify-otp", {
+            const verification = await fetch(`${backend_url}/user/verify-otp`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -37,7 +39,7 @@ function Otpverify() {
                 body: JSON.stringify({ otp: finalOtp }),
                 credentials: "include"
             })
-            console.log(verification);
+          
 
             if (verification.status === 200) {
                 toast.success("successfully Registered!")

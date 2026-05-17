@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+
 const Register = () => {
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
+
   const navigate = useNavigate();
   const [inputData, setInputData] = useState({
     name: "",
@@ -29,7 +32,7 @@ const Register = () => {
     // call api signup & login
     if (issignin) {
       // sign in
-      const response = await fetch(`http://localhost:4000/user/signin`, {
+      const response = await fetch(`${backend_url}/user/signin`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify({
@@ -51,7 +54,7 @@ const Register = () => {
       }
     } else {
       // registration
-      const response = await fetch(`http://localhost:4000/user/register`, {
+      const response = await fetch(`${backend_url}/user/register`, {
         method: "POST",
         credentials: "include",
         body: JSON.stringify(inputData),

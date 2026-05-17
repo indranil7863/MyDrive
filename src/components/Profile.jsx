@@ -5,13 +5,15 @@ import "./profile.css";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+
 const Profile = () => {
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
   const [userData, setUserData] = useState({});
 
   async function FetchData() {
     try {
-      const response = await fetch(`http://localhost:4000/user/profile`, {
+      const response = await fetch(`${backend_url}/user/profile`, {
         method: "GET",
         credentials: "include",
       });
@@ -29,7 +31,7 @@ const Profile = () => {
 
   async function LogoutHandler() {
     try {
-      const response = await fetch("http://localhost:4000/user/logout", {
+      const response = await fetch(`${backend_url}/user/logout`, {
         method: "POST",
         credentials: "include",
       });
