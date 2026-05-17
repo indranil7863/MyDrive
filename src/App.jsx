@@ -13,6 +13,7 @@ import Register from "./components/Register";
 import Profile from "./components/Profile";
 import FileView from "./components/FileView";
 import Otpverify from "./components/Otpverify";
+import Services from "./components/Services";
 
 const App = () => {
   const router = createBrowserRouter(
@@ -20,9 +21,10 @@ const App = () => {
       <Route path="/" element={<HomeLayout />}>
         <Route index element={<ShowContent />} />
         <Route path="profile" element={<Profile />} />
+        <Route path="services" element={<Services />} />
         <Route path="register" element={<Register />} />
-        <Route path="verify" element={<Otpverify/>} />
-        <Route path="file/:id" element={<FileView/>} />
+        <Route path="verify" element={<Otpverify />} />
+        <Route path="file/:id" element={<FileView />} />
         <Route path="directory" element={<DirectoryLayout />}>
           <Route path=":dirid" element={<ShowContent />} />
         </Route>
