@@ -9,8 +9,8 @@ const Register = () => {
   const navigate = useNavigate();
   const [inputData, setInputData] = useState({
     name: "",
-    email: "",
-    password: "",
+    email: "indranilbera542@gmail.com",
+    password: "Indranil",
   });
   const [issignin, setIsSignIn] = useState(true);
   const [errorData, setErrorData] = useState("");
@@ -47,7 +47,7 @@ const Register = () => {
 
       if (response.status === 200) {
         toast.success("successful Login!")
-        navigate("/", {replace: true});
+        navigate("/", { replace: true });
       } else {
         setErrorData(data.message);
         toast.error("Login failed!")
