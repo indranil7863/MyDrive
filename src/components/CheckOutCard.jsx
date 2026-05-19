@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 function CheckOutCard({ open, setOpen, plandetails }) {
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
   const [name, setName] = useState("Indranil bera");
   const [mobile, setMobile] = useState("7863934256");
   const [touched, setTouched] = useState({ name: false, mobile: false });
@@ -52,7 +53,7 @@ function CheckOutCard({ open, setOpen, plandetails }) {
       user,
     };
     console.log("payload: ", payload);
-    const response = await fetch("http://localhost:4000/payment/create-order", {
+    const response = await fetch(`${backend_url}/payment/create-order`, {
       method: "POST", 
       body: JSON.stringify(payload),
       headers: {
@@ -203,7 +204,7 @@ function openRazorpayPopup({ orderId, user, planName, setOpen }) {
     handler: async function (response) {
       console.log(response);
       const orderResponse = await fetch(
-        "http://localhost:4000/payment/complete-order",
+        `${backend_url}/payment/complete-order`,
         {
           method: "POST",
           body: JSON.stringify({
