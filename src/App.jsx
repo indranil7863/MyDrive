@@ -18,7 +18,7 @@ import Services from "./components/Services";
 const App = () => {
   const router = createBrowserRouter(
     createRoutesFromElements(
-      <Route path="/" element={<HomeLayout />}>
+      <Route path="/" element={<HomeLayout />} >
         <Route index element={<ShowContent />} />
         <Route path="profile" element={<Profile />} />
         <Route path="services" element={<Services />} />
