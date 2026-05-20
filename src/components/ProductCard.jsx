@@ -22,7 +22,7 @@ function ProductCard({ plan, storage, actualprice, disprice, description }) {
         </div>
       </div>
       {
-        <CheckOutCard open={open} setOpen={setOpen} plandetails={{ plan, description, disprice }} />
+        open && <CheckOutCard open={open} setOpen={setOpen} plandetails={{ plan, description, disprice }} />
       }
     </>
   )

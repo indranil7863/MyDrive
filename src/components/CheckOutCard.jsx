@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 function CheckOutCard({ open, setOpen, plandetails }) {
   const backend_url = import.meta.env.VITE_BACKEND_URL;
@@ -6,6 +7,17 @@ function CheckOutCard({ open, setOpen, plandetails }) {
   const [mobile, setMobile] = useState("7863934256");
   const [touched, setTouched] = useState({ name: false, mobile: false });
   const modalRef = useRef(null);
+
+  useEffect(() => {
+    const razorpayid = document.querySelector('#razorpay-script');
+    if (razorpayid) return;
+    const script = document.createElement('script')
+    script.id = "razorpay-script"
+    script.async = true;
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    document.body.appendChild(script);
+  }, [])
+
 
   useEffect(() => {
     if (!open) {
@@ -54,7 +66,7 @@ function CheckOutCard({ open, setOpen, plandetails }) {
     };
     console.log("payload: ", payload);
     const response = await fetch(`${backend_url}/payment/create-order`, {
-      method: "POST", 
+      method: "POST",
       body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",
@@ -188,8 +200,9 @@ function CheckOutCard({ open, setOpen, plandetails }) {
 }
 
 function openRazorpayPopup({ orderId, user, planName, setOpen }) {
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
   const rzp = new Razorpay({
-    key: "rzp_test_Sr2cbarIzLM6Gv",
+    key: "rzp_test_SrVKJg8iTsL1ai",
     description: "My first test payment.",
     name: "My drive Plans",
     order_id: orderId,
@@ -227,11 +240,13 @@ function openRazorpayPopup({ orderId, user, planName, setOpen }) {
         console.log("Order Not Completed")
         setOpen(false);
       }
+      toast.success("Payment successful!");
     },
   });
 
   rzp.on("payment.failed", function (response) {
     console.log(response);
+    toast.error("Payment failed!")
   });
 
   rzp.open();
