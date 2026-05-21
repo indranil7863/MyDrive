@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 const Register = () => {
   const backend_url = import.meta.env.VITE_BACKEND_URL;
+  const [isloading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const [inputData, setInputData] = useState({
@@ -25,49 +26,62 @@ const Register = () => {
     // call forget password api
   }
 
-
   async function SingupHandler(e) {
     e.preventDefault();
     console.log(inputData);
     // call api signup & login
     if (issignin) {
       // sign in
-      const response = await fetch(`${backend_url}/user/signin`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify({
-          email: inputData.email,
-          password: inputData.password,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${backend_url}/user/signin`, {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            email: inputData.email,
+            password: inputData.password,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
 
-      if (response.status === 200) {
-        toast.success("successful Login!")
-        navigate("/", { replace: true });
-      } else {
-        setErrorData(data.message);
-        toast.error("Login failed!")
+        if (response.status === 200) {
+          toast.success("successful Login!")
+          navigate("/", { replace: true });
+        } else {
+          setErrorData(data.message);
+          toast.error("Login failed!")
+        }
+      } catch (error) {
+        toast.error("Network Error!");
+      } finally {
+        setIsLoading(false);
       }
     } else {
       // registration
-      const response = await fetch(`${backend_url}/user/register`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(inputData),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const data = await response.json();
-      if (response.status === 200) {
-        navigate('/verify');
-      } else {
-        setErrorData(data.error);
-        toast.error(errorData);
+      setIsLoading(true);
+      try {
+        const response = await fetch(`${backend_url}/user/register`, {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify(inputData),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await response.json();
+        if (response.status === 200) {
+          navigate('/verify');
+        } else {
+          setErrorData(data.error);
+          toast.error(errorData);
+        }
+      } catch (error) {
+        toast.error("Network Error!");
+      } finally {
+        setIsLoading(false);
       }
     }
   }
@@ -78,6 +92,7 @@ const Register = () => {
       [e.target.name]: e.target.value,
     });
   }
+
   return (
     <div>
       <div className="register-wrapper"></div>
@@ -151,10 +166,19 @@ const Register = () => {
             )}
           </div>
           <p className="error-message">{errorData}</p>
+          {
+            isloading ?
+              (<button className="section1-button">
+                <div className=" w-[25px] h-[25px] border border-l-0 rounded-full border-3 animate-spin"></div>
+              </button>)
+              :
+              (
+                <button type="submit" className="section1-button" disabled={isloading}>
+                  {issignin ? "Sign In" : "Sign Up"}
+                </button>
+              )
+          }
 
-          <button type="submit" className="section1-button">
-            {issignin ? "Sign In" : "Sign Up"}
-          </button>
           <div className="section1-footer">
             <span>
               {issignin ? "don't have an account?" : "already have an account?"}
@@ -172,6 +196,7 @@ const Register = () => {
           />
         </section>
       </form>
+
     </div>
   );
 };

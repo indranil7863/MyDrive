@@ -1,4 +1,3 @@
-import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import "./profile.css";
@@ -7,9 +6,11 @@ import { toast } from "react-toastify";
 
 
 const Profile = () => {
+
   const backend_url = import.meta.env.VITE_BACKEND_URL;
   const navigate = useNavigate();
   const [userData, setUserData] = useState({});
+  const [isloading, setIsLoading] = useState(false);
 
   async function FetchData() {
     try {
@@ -31,6 +32,7 @@ const Profile = () => {
 
   async function LogoutHandler() {
     try {
+      setIsLoading(true)
       const response = await fetch(`${backend_url}/user/logout`, {
         method: "POST",
         credentials: "include",
@@ -44,6 +46,9 @@ const Profile = () => {
       }
     } catch (error) {
       toast.error("network error!");
+    }
+    finally {
+      isloading(false);
     }
   }
 
@@ -63,10 +68,19 @@ const Profile = () => {
         </div>
         <h1>Hi, {userData.username}</h1>
       </div>
-      <div className="second-section">
-        <button onClick={LogoutHandler}>Logout</button>
-        <Link to="/">Home</Link>
-      </div>
+
+      {
+        isloading ?
+          (<div className=" w-full flex justify-center items-center h-[60px]">
+            <div className=" w-[25px] h-[25px] border border-l-0 rounded-full border-3 animate-spin"></div>
+          </div>)
+          :
+          (<div className="second-section">
+            <button onClick={LogoutHandler}>Logout</button>
+            <Link to="/">Home</Link>
+          </div>)
+      }
+
     </div>
   );
 };

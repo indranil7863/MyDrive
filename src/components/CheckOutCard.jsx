@@ -47,7 +47,7 @@ function CheckOutCard({ open, setOpen, plandetails }) {
       : "";
   const mobileErr =
     touched.mobile && !/^[6-9]\d{9}$/.test(mobile.trim())
-      ? "Enter a valid 10-digit Indian mobile (starts with 6–9)."
+      ? "Enter a valid 10-digit Indian mobile (starts with +91)."
       : "";
 
   const isValid = name.trim().length >= 2 && /^[6-9]\d{9}$/.test(mobile.trim());

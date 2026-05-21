@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import profilepic from "../assets/user.png";
 import FileImage from "./FileImage";
+import Loading from "./Loading";
 import { toast } from 'react-toastify';
 
 
@@ -123,6 +124,7 @@ const ShowContent = () => {
       }
       setData(data);
     } catch (error) {
+      // navigate("/register");
       toast.error("network error!")
     }
   }
@@ -378,6 +380,9 @@ const ShowContent = () => {
           </div>
         </div>
       )}
+      {
+        data.directories.length === 0 && data.files.length === 0 && (<Loading />)
+      }
       {data.directories.map((dir) => {
         return (
           <div key={dir._id} className="folder-item">
