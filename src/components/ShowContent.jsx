@@ -153,14 +153,47 @@ const ShowContent = () => {
   }
 
   const [progress, setProgress] = useState(0);
+
   // file upload
-  function UploadFileHandler(e) {
+  async function UploadFileHandler(e) {
     const File = e.target.files[0];
 
+    if (!File) return;
+    const tempItem = {
+      file: File,
+      name: File.name,
+      size: File.size,
+    }
+    console.log(tempItem)
+
+    const data = await fetch(`${backend_url}/files/upload/initiate`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: File.name,
+        size: File.size,
+        contentType: File.type,
+        parentDirId: dirid
+      })
+    })
+
+    const { uploadSignedUrl, fileId } = await data.json();
+    console.log("uploadUrl: ", uploadSignedUrl)
+    StartUpload(tempItem, uploadSignedUrl);
+  }
+
+  // after getting singned url from backend send file to S3
+  function StartUpload(tempItem, uploadSignedUrl) {
+    console.log("tempitem:  ", tempItem);
+    console.log("uploadUrl: ", uploadSignedUrl)
     const xhr = new XMLHttpRequest();
     xhr.withCredentials = true;
-    xhr.open("POST", `${backend_url}/files/${File.name}`);
-    xhr.setRequestHeader("parentdirid", dirid);
+
+    xhr.open("PUT", uploadSignedUrl);
+
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) {
         const percent = Math.floor((event.loaded / event.total) * 100)
@@ -168,6 +201,7 @@ const ShowContent = () => {
         setProgress(Number(percent));
       }
     };
+
     xhr.onload = function () {
       if (xhr.status === 200) {
         setProgress(0);
@@ -177,10 +211,12 @@ const ShowContent = () => {
         FetchData();
       }
     };
+
     xhr.onerror = function () {
       toast.error("network error!")
     };
-    xhr.send(File);
+
+    xhr.send(tempItem.file);
   }
 
 
