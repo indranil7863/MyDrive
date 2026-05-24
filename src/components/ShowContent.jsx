@@ -24,6 +24,7 @@ const ShowContent = () => {
   const [isRenameDir, setIsRenameDir] = useState(false);
   const [renameDir, setRenameDir] = useState("");
   const [dirIdRename, setDirIdRename] = useState("");
+  const [isloading, setIsLoading] = useState(false);
 
   // const [editing, setEditing] = useState(true);
   const inputRef = useRef(null);
@@ -44,6 +45,7 @@ const ShowContent = () => {
       if (res.status !== 200) {
         toast.error("This is can't be opened!")
       }
+      
     } catch (error) {
       toast.error("network error!")
     }
@@ -112,6 +114,7 @@ const ShowContent = () => {
 
   async function FetchData() {
     try {
+      setIsLoading(true);
       const url = `${backend_url}/directory`;
       const response = await fetch(url + `/${dirid ? dirid : ""}`, {
         credentials: "include",
@@ -126,6 +129,8 @@ const ShowContent = () => {
     } catch (error) {
       // navigate("/register");
       toast.error("network error!")
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -133,23 +138,22 @@ const ShowContent = () => {
     const res = await fetch(
       `${backend_url}/files/` + fileid + "?action=download", {
       credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      }
+
     }
     );
+    const data = await res.json();
 
-    const blob = await res.blob();
-    const url = window.URL.createObjectURL(blob);
+    // const blob = await res.blob();
+    // const url = window.URL.createObjectURL(blob);
 
     const a = document.createElement("a");
-    a.href = url;
+    a.href = data.url;
     a.download = filename; // filename
     document.body.appendChild(a);
     a.click();
 
     a.remove();
-    window.URL.revokeObjectURL(url);
+
   }
 
   const [progress, setProgress] = useState(0);
@@ -417,7 +421,7 @@ const ShowContent = () => {
         </div>
       )}
       {
-        data.directories.length === 0 && data.files.length === 0 && (<Loading />)
+        isloading && (<Loading />)
       }
       {data.directories.map((dir) => {
         return (
