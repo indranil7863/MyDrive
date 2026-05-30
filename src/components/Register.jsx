@@ -28,7 +28,7 @@ const Register = () => {
 
   async function SingupHandler(e) {
     e.preventDefault();
-    console.log(inputData);
+
     // call api signup & login
     if (issignin) {
       // sign in

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import profilepic from "../assets/user.png";
 import FileImage from "./FileImage";
 import Loading from "./Loading";
@@ -10,8 +10,10 @@ const ShowContent = () => {
   const backend_url = import.meta.env.VITE_BACKEND_URL;
   const { dirid } = useParams();
 
+
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const [breadcrumb, setBreadCrumb] = useState(null);
 
   const [data, setData] = useState({ files: [], directories: [] });
   const [isRename, setIsRename] = useState(false);
@@ -25,6 +27,8 @@ const ShowContent = () => {
   const [renameDir, setRenameDir] = useState("");
   const [dirIdRename, setDirIdRename] = useState("");
   const [isloading, setIsLoading] = useState(false);
+  const [directoryFlow, setDirectoryFlow] = useState("root");
+  const directoryFLowRef = useRef("Root");
 
   // const [editing, setEditing] = useState(true);
   const inputRef = useRef(null);
@@ -113,6 +117,23 @@ const ShowContent = () => {
     FetchData();
   }
 
+  // fetch breadcrumb call 
+  async function FetchBreadCrumbData() {
+    try {
+      const response = await fetch(`${backend_url}/directory/breadcrumb/${dirid}`, {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      const data = await response.json();
+      setBreadCrumb(data.result);
+    } catch (error) {
+      toast.error("network error!")
+    }
+  }
+
+  // fetch directory data
   async function FetchData() {
     try {
       setIsLoading(true);
@@ -121,11 +142,14 @@ const ShowContent = () => {
         credentials: "include",
       });
       const data = await response.json();
-      console.log("show-data", data);
+      // console.log("show-data", data);
       if (response.status !== 200) {
         navigate("/register");
         toast.error("You are not logged in!")
       }
+      // fetchBreadcrumb call
+      if (dirid) await FetchBreadCrumbData(dirid);
+
       setData(data);
     } catch (error) {
       // navigate("/register");
@@ -392,15 +416,19 @@ const ShowContent = () => {
         </div>
         <div className="progress-bar" style={{ width: `${progress}%` }}></div>
       </div>
+      <div className="w-full flex justify-center bg-gray-200">
+        <div className=" bg-gray-200 sm:rounded-xl  flex overflow-x-auto whitespace-nowrap scrollbar-none w-[80%] text-2xl font-bold text-blue-500 mx-auto" style={{ padding: "8px 20px" }}>
+          {breadcrumb ? breadcrumb.map((dir, index) => (
+            <span key={index}>
 
-      {!data.files.length && !data.directories.length && (
-        <div className="blank-message">
-          <p>
-            No files are uploaded here. upload your desired files and create
-            directories.
-          </p>
+              {index !== 0 && <span className=" text-black px-2 w-4 inline-block text-center">{" > "}</span>}
+
+              {dir}
+            </span>
+          )) : "Root"}
         </div>
-      )}
+      </div>
+
       {isCreatFolder && (
         <div className="set-foldername">
           <input
@@ -423,7 +451,7 @@ const ShowContent = () => {
         </div>
       )}
       {
-        isloading && (<Loading />)
+        isloading && (<div className="absolute top-[50%] left-[50%]"><Loading /></div>)
       }
       {data.directories.map((dir) => {
         return (
@@ -523,6 +551,14 @@ const ShowContent = () => {
           </div>
         );
       })}
+      {!isloading && !data.files.length && !data.directories.length && (
+        <div className="blank-message">
+          <p>
+            No files are uploaded here. upload your desired files and create
+            directories.
+          </p>
+        </div>
+      )}
 
       {isRename && (
         <div className="dialog-box">
