@@ -45,7 +45,7 @@ const ShowContent = () => {
       if (res.status !== 200) {
         toast.error("This is can't be opened!")
       }
-      
+
     } catch (error) {
       toast.error("network error!")
     }
@@ -89,6 +89,7 @@ const ShowContent = () => {
 
   // file delete
   async function DeleteHandler(fileid) {
+    setShowMenu("");
     try {
       const response = await fetch(`${backend_url}/files/${fileid}`, {
         method: "DELETE",
@@ -135,6 +136,7 @@ const ShowContent = () => {
   }
 
   async function DownloadHandler(fileid, filename) {
+    setShowMenu("");
     const res = await fetch(
       `${backend_url}/files/` + fileid + "?action=download", {
       credentials: "include",
@@ -450,16 +452,18 @@ const ShowContent = () => {
               </svg>
             </div>
             {showMenu === dir._id && (
-              <div ref={menuRef} className="options-dropdown">
+              <div ref={menuRef} className="flex flex-col justify-center items-center gap-4 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[100px] p-4 absolute right-0 top-6 z-5 rounded-sm">
                 <button
                   onClick={() => DirectoryRename(dir._id, dir.dirname)}
-                  className="rename-btn"
+                  // className="rename-btn"
+                  className="w-[80%] hover:text-blue-700 outline-0 border-0"
                 >
                   rename
                 </button>
                 <button
                   onClick={() => DirDeleteHandler(dir._id)}
-                  className="delete-btn"
+                  // className="delete-btn"
+                  className="w-[80%] hover:text-blue-700 outline-0 "
                 >
                   delete
                 </button>
@@ -489,24 +493,30 @@ const ShowContent = () => {
               </svg>
             </div>
             {showMenu === file._id && (
-              <div ref={menuRef} className="options-dropdown">
+              <div ref={menuRef} className="flex flex-col justify-center items-center gap-2 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px]  absolute right-0 top-8 z-5 rounded-sm" >
                 <button
-                  className="download-btn"
+                  className="w-[80%] hover:text-blue-700 outline-0 "
                   onClick={() => DownloadHandler(file._id, file.fileName)}
                 >
                   Download
                 </button>
                 <button
-                  className="rename-btn"
+                  className="w-[80%] hover:text-blue-700 outline-0 "
                   onClick={() => RenameHandler(file.fileName, file._id)}
                 >
                   Rename
                 </button>
                 <button
-                  className="delete-btn"
+                  className="w-[80%] hover:text-blue-700 outline-0 "
                   onClick={() => DeleteHandler(file._id)}
                 >
                   Delete
+                </button>
+                <button
+                  className="w-[80%] hover:text-blue-700 outline-0 "
+
+                >
+                  Details
                 </button>
               </div>
             )}
