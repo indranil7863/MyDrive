@@ -5,6 +5,7 @@ import FileImage from "./FileImage";
 import Loading from "./Loading";
 import { toast } from 'react-toastify';
 import ContentDetails from "./ContentDetails";
+import { FileSizeCalculate } from "../utils/FileSizeCalculate.js";
 
 
 const ShowContent = () => {
@@ -152,7 +153,7 @@ const ShowContent = () => {
       }
       // fetchBreadcrumb call
       if (dirid) await FetchBreadCrumbData(dirid);
-
+      console.log(data);
       setData(data);
     } catch (error) {
       // navigate("/register");
@@ -382,11 +383,12 @@ const ShowContent = () => {
     };
   }, [dirid, isCreatFolder, isRename, isRenameDir]);
 
-  const [currentDetails, setCurrentDetails] = useState({ filename: "", breadcrumb: [] });
-  function DetailsButtonHandler(fileName, breadcrumb) {
+  const [currentDetails, setCurrentDetails] = useState({ filename: "", filesize: "", breadcrumb: [] });
+  function DetailsButtonHandler(fileName, breadcrumb, filesize) {
     setDetails(true);
     setShowMenu("");
-    setCurrentDetails((prev) => ({ ...prev, filename: fileName, breadcrumb: breadcrumb }));
+    console.log("filesize: ", filesize);
+    setCurrentDetails((prev) => ({ ...prev, filename: fileName, filesize: filesize, breadcrumb: breadcrumb }));
   }
 
   return (
@@ -479,9 +481,11 @@ const ShowContent = () => {
                 className="folder-img"
               />
               <p className="dir-name">{dir.dirname}</p>
+
+              <p className=" w-[100px]">{FileSizeCalculate(dir.TotalDirectorySize)}</p>
             </div>
             {
-              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} breadcrumb={currentDetails.breadcrumb} isdirectory={true} />
+              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} isdirectory={true} />
             }
 
             <div onClick={() => toggleId(dir._id)}>
@@ -512,8 +516,7 @@ const ShowContent = () => {
                   Delete
                 </button>
                 <button
-                  // onClick={() => DirDeleteHandler(dir._id)}
-                  onClick={() => DetailsButtonHandler(dir.dirname, breadcrumb)}
+                  onClick={() => DetailsButtonHandler(dir.dirname, breadcrumb, dir.TotalDirectorySize)}
                   className="w-[80%] hover:text-blue-700 outline-0 "
                 >
                   Details
@@ -530,9 +533,11 @@ const ShowContent = () => {
             <div className="folder-img-name" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
               <FileImage filename={file.fileName} />
               <p className="file-name">{file.fileName}</p>
+
+              <p className=" w-[100px]">{FileSizeCalculate(file.fileSize)}</p>
             </div>
             {
-              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} breadcrumb={currentDetails.breadcrumb} />
+              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} />
             }
 
             {/* <Link to={`/files/${file.id}`}>Open</Link> */}
@@ -569,7 +574,7 @@ const ShowContent = () => {
                 </button>
                 <button
                   className="w-[80%] hover:text-blue-700 outline-0 "
-                  onClick={() => DetailsButtonHandler(file.fileName, breadcrumb)}
+                  onClick={() => DetailsButtonHandler(file.fileName, breadcrumb, file.fileSize)}
                 >
                   Details
                 </button>

@@ -1,9 +1,13 @@
 import React from 'react'
+import { FileSizeCalculate } from '../utils/FileSizeCalculate.js';
 
-function ContentDetails({ details, setDetails, filename, breadcrumb, isdirectory = false }) {
+function ContentDetails({ details, setDetails, filename, filesize = 0, breadcrumb, isdirectory = false }) {
     function closeHandler() {
         setDetails(false);
     }
+    console.log("received: ", filesize);
+    const Filesize = FileSizeCalculate(filesize);
+    console.log(Filesize);
 
     let filepath = "";
     if (breadcrumb == null) filepath += '/Root'
@@ -15,7 +19,7 @@ function ContentDetails({ details, setDetails, filename, breadcrumb, isdirectory
             <div className="flex flex-col gap-2 flex-1 overflow-y-auto break-all" style={{ padding: "2px 10px" }}>
                 <p className="text-lg font-semibold">Name: <span className="text-sm font-light">{filename}</span></p>
                 <p className="text-lg font-semibold">Path: <span className="text-sm font-light">{!isdirectory ? filepath + "/" + filename : filepath + '/' + filename}</span></p>
-                <p className="text-lg font-semibold">Size: <span className="text-sm font-light">50 GB</span></p>
+                <p className="text-lg font-semibold">Size: <span className="text-sm font-light">{Filesize}</span></p>
                 <p className="text-lg font-semibold">Created At: <span className="text-sm font-light">{new Date().toLocaleString()}</span></p>
                 <p className="text-lg font-semibold">Updated At: <span className="text-sm font-light">{new Date().toLocaleString()}</span></p>
             </div>
