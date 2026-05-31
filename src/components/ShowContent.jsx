@@ -92,6 +92,7 @@ const ShowContent = () => {
   // file delete
   async function DeleteHandler(fileid) {
     setShowMenu("");
+    setIsLoading(true);
     try {
       const response = await fetch(`${backend_url}/files/${fileid}`, {
         method: "DELETE",
@@ -108,6 +109,8 @@ const ShowContent = () => {
       }
     } catch (error) {
       toast.error("network error!")
+    } finally {
+      setIsLoading(false);
     }
 
     // re-render component
@@ -324,6 +327,8 @@ const ShowContent = () => {
 
   // directory delete
   async function DirDeleteHandler(DirId) {
+    setShowMenu("");
+    setIsLoading(true);
     try {
       const res = await fetch(`${backend_url}/directory/${DirId}`, {
         credentials: "include",
@@ -337,6 +342,8 @@ const ShowContent = () => {
       }
     } catch (error) {
       toast.error("network error!");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -421,7 +428,7 @@ const ShowContent = () => {
 
               {index !== 0 && <span className=" text-black px-2 w-4 inline-block text-center">{" > "}</span>}
 
-              {dir}
+              {dir === "root" ? "Root" : dir}
             </span>
           )) : "Root"}
         </div>
@@ -449,7 +456,7 @@ const ShowContent = () => {
         </div>
       )}
       {
-        isloading && (<div className="absolute top-[50%] left-[50%]"><Loading /></div>)
+        isloading && (<div className="absolute top-[50%] left-[50%] z-10"><Loading /></div>)
       }
       {data.directories.map((dir) => {
         return (
