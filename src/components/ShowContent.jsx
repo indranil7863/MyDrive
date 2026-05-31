@@ -4,6 +4,7 @@ import profilepic from "../assets/user.png";
 import FileImage from "./FileImage";
 import Loading from "./Loading";
 import { toast } from 'react-toastify';
+import ContentDetails from "./ContentDetails";
 
 
 const ShowContent = () => {
@@ -26,6 +27,7 @@ const ShowContent = () => {
   const [dirIdRename, setDirIdRename] = useState("");
   const [isloading, setIsLoading] = useState(false);
   const [directoryFlow, setDirectoryFlow] = useState("root");
+  const [details, setDetails] = useState(false);
   const directoryFLowRef = useRef("Root");
 
   // const [editing, setEditing] = useState(true);
@@ -380,6 +382,12 @@ const ShowContent = () => {
     };
   }, [dirid, isCreatFolder, isRename, isRenameDir]);
 
+  const [currentDetails, setCurrentDetails] = useState({ filename: "", breadcrumb: [] });
+  function DetailsButtonHandler(fileName, breadcrumb) {
+    setDetails(true);
+    setShowMenu("");
+    setCurrentDetails((prev) => ({ ...prev, filename: fileName, breadcrumb: breadcrumb }));
+  }
 
   return (
     <div className="main-file-container">
@@ -472,6 +480,9 @@ const ShowContent = () => {
               />
               <p className="dir-name">{dir.dirname}</p>
             </div>
+            {
+              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} breadcrumb={currentDetails.breadcrumb} isdirectory={true} />
+            }
 
             <div onClick={() => toggleId(dir._id)}>
               <svg
@@ -485,26 +496,34 @@ const ShowContent = () => {
               </svg>
             </div>
             {showMenu === dir._id && (
-              <div ref={menuRef} className="flex flex-col justify-center items-center gap-4 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[100px] p-4 absolute right-0 top-6 z-5 rounded-sm">
+              <div ref={menuRef} className="flex flex-col justify-center items-center gap-4 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px] p-4 absolute right-0 top-6 z-5 rounded-sm">
                 <button
                   onClick={() => DirectoryRename(dir._id, dir.dirname)}
                   // className="rename-btn"
                   className="w-[80%] hover:text-blue-700 outline-0 border-0"
                 >
-                  rename
+                  Rename
                 </button>
                 <button
                   onClick={() => DirDeleteHandler(dir._id)}
                   // className="delete-btn"
                   className="w-[80%] hover:text-blue-700 outline-0 "
                 >
-                  delete
+                  Delete
+                </button>
+                <button
+                  // onClick={() => DirDeleteHandler(dir._id)}
+                  onClick={() => DetailsButtonHandler(dir.dirname, breadcrumb)}
+                  className="w-[80%] hover:text-blue-700 outline-0 "
+                >
+                  Details
                 </button>
               </div>
             )}
           </div>
         );
       })}
+
       {data.files.map((file) => {
         return (
           <div key={file._id} className="file-item">
@@ -512,6 +531,9 @@ const ShowContent = () => {
               <FileImage filename={file.fileName} />
               <p className="file-name">{file.fileName}</p>
             </div>
+            {
+              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} breadcrumb={currentDetails.breadcrumb} />
+            }
 
             {/* <Link to={`/files/${file.id}`}>Open</Link> */}
             <div onClick={() => toggleId(file._id)}>
@@ -547,7 +569,7 @@ const ShowContent = () => {
                 </button>
                 <button
                   className="w-[80%] hover:text-blue-700 outline-0 "
-
+                  onClick={() => DetailsButtonHandler(file.fileName, breadcrumb)}
                 >
                   Details
                 </button>
@@ -556,6 +578,8 @@ const ShowContent = () => {
           </div>
         );
       })}
+
+
       {!isloading && !data.files.length && !data.directories.length && (
         <div className="blank-message">
           <p>
@@ -564,6 +588,9 @@ const ShowContent = () => {
           </p>
         </div>
       )}
+
+
+
 
       {isRename && (
         <div className="dialog-box">
