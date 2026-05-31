@@ -9,8 +9,6 @@ import { toast } from 'react-toastify';
 const ShowContent = () => {
   const backend_url = import.meta.env.VITE_BACKEND_URL;
   const { dirid } = useParams();
-
-
   const menuRef = useRef(null);
   const navigate = useNavigate();
   const [breadcrumb, setBreadCrumb] = useState(null);
