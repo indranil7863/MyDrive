@@ -215,7 +215,7 @@ const ShowContent = () => {
     })
 
     const { uploadSignedUrl, fileId } = await data.json();
-    console.log("uploadUrl: ", uploadSignedUrl)
+    // console.log("uploadUrl: ", uploadSignedUrl)
     StartUpload(tempItem, uploadSignedUrl);
   }
 
