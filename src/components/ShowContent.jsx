@@ -392,56 +392,47 @@ const ShowContent = () => {
   }
 
   return (
-    <div className="main-file-container">
-      <div className="wrapper-banner-section">
-        <div className="banner-section">
-          <div className="banner-firstdiv">
-            <label htmlFor="fileupload">
-              <div className="upload-file">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  className="bi bi-upload"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                  <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
-                </svg>
-                <span>Upload</span>
-              </div>
-              <input
-                onChange={UploadFileHandler}
-                type="file"
-                id="fileupload"
-                style={{ display: "none" }}
-              />
-            </label>
-            <button onClick={CreateDirectroyHandler} className="create-folder">
-              <span class="material-symbols-outlined">create_new_folder</span>
-              <span>Create Folder</span>
-            </button>
-          </div>
-          <Link to="/profile" className="profile-wrapper">
-            <div className="profile-imgcontainer">
-              <img src={profilepic} alt="image" title="profile" />
+    <div className="bg-[#7fffd4] h-screen">
+      <div className="main-file-container">
+        <div className="wrapper-banner-section">
+          <div className="banner-section">
+            <div className="banner-firstdiv">
+              <label htmlFor="fileupload">
+                <div className="upload-file">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    className="bi bi-upload"
+                    viewBox="0 0 16 16"
+                  >
+                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
+                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
+                  </svg>
+                  <span>Upload</span>
+                </div>
+                <input
+                  onChange={UploadFileHandler}
+                  type="file"
+                  id="fileupload"
+                  style={{ display: "none" }}
+                />
+              </label>
+              <button onClick={CreateDirectroyHandler} className="create-folder">
+                <span class="material-symbols-outlined">create_new_folder</span>
+                <span>Create </span>
+              </button>
             </div>
-          </Link>
+            <Link to="/profile" className="profile-wrapper">
+              <div className="profile-imgcontainer">
+                <img src={profilepic} alt="image" title="profile" />
+              </div>
+            </Link>
+          </div>
+          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
         </div>
-        <div className="progress-bar" style={{ width: `${progress}%` }}></div>
-      </div>
-      <div className="w-full flex justify-center bg-gray-200">
-        <div className=" bg-gray-200 sm:rounded-xl  flex overflow-x-auto whitespace-nowrap scrollbar-none w-[80%] text-2xl font-bold text-blue-500 mx-auto" style={{ padding: "8px 20px" }}>
-          {breadcrumb ? breadcrumb.map((dir, index) => (
-            <span key={index}>
 
-              {index !== 0 && <span className=" text-black px-2 w-4 inline-block text-center">{" > "}</span>}
-
-              {dir === "root" ? "Root" : dir}
-            </span>
-          )) : "Root"}
-        </div>
       </div>
 
       {isCreatFolder && (
@@ -468,131 +459,151 @@ const ShowContent = () => {
       {
         isloading && (<div className="absolute top-[50%] left-[50%] z-10"><Loading /></div>)
       }
-      {data.directories.map((dir) => {
-        return (
-          <div key={dir._id} className="folder-item">
-            <div
-              onClick={() => OpenDirectory(dir._id)}
-              className="folder-img-name"
-            >
-              <img
-                src="https://img.icons8.com/?size=100&id=74359&format=png&color=228BE6"
-                alt=""
-                className="folder-img"
-              />
-              <p className="dir-name">{dir.dirname}</p>
+      <div className="w-full flex justify-center fixed z-5 bg-gray-200 bg-amber-300" style={{ marginTop: "40px" }}>
+        <div className=" bg-gray-200 sm:rounded-xl  flex overflow-x-auto whitespace-nowrap scrollbar-none w-[80%] text-2xl font-bold text-blue-500 mx-auto" style={{ padding: "8px 20px" }}>
+          {breadcrumb ? breadcrumb.map((dir, index) => (
+            <span key={index}>
 
-              <p className=" w-[100px]">{FileSizeCalculate(dir.TotalDirectorySize)}</p>
-            </div>
-            {
-              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} isdirectory={true} />
-            }
+              {index !== 0 && <span className=" text-black px-2 w-4 inline-block text-center">{" > "}</span>}
 
-            <div onClick={() => toggleId(dir._id)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#000000"
-              >
-                <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-              </svg>
-            </div>
-            {showMenu === dir._id && (
-              <div ref={menuRef} className="flex flex-col justify-center items-center gap-4 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px] p-4 absolute right-0 top-6 z-5 rounded-sm">
-                <button
-                  onClick={() => DirectoryRename(dir._id, dir.dirname)}
-                  // className="rename-btn"
-                  className="w-[80%] hover:text-blue-700 outline-0 border-0"
+              {dir === "root" ? "Home" : dir}
+            </span>
+          )) : "Home"}
+        </div>
+      </div>
+      <section className="bg-blue-300/20 flex flex-col gap-4 w-[80%] rounded-lg" style={{ margin: " 100px auto", padding: "10px " }}>
+        <h1 className="bg-white text-lg w-[120px] rounded-sm text-center" style={{ padding: " 4px" }}>Directories </h1>
+        <div className=" flex flex-wrap justify-start gap-4 " style={{ padding: "4px" }}>
+
+          {data.directories.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Directories Created!</p>}
+          {data.directories && data.directories.map((dir) => {
+            return (
+              <div key={dir._id} className="folder-item" style={{ width: "200px" }}>
+                <div
+                  onClick={() => OpenDirectory(dir._id)}
+                  className="folder-img-name"
                 >
-                  Rename
-                </button>
-                <button
-                  onClick={() => DirDeleteHandler(dir._id)}
-                  // className="delete-btn"
-                  className="w-[80%] hover:text-blue-700 outline-0 "
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => DetailsButtonHandler(dir.dirname, breadcrumb, dir.TotalDirectorySize)}
-                  className="w-[80%] hover:text-blue-700 outline-0 "
-                >
-                  Details
-                </button>
+                  <img
+                    src="https://img.icons8.com/?size=100&id=74359&format=png&color=228BE6"
+                    alt=""
+                    className="folder-img"
+                  />
+                  <p className="dir-name">{dir.dirname}</p>
+
+                  {/* <p className=" w-[100px]">{FileSizeCalculate(dir.TotalDirectorySize)}</p> */}
+                </div>
+                {
+                  details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} isdirectory={true} />
+                }
+
+                <div onClick={() => toggleId(dir._id)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#000000"
+                  >
+                    <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
+                  </svg>
+                </div>
+                {showMenu === dir._id && (
+                  <div ref={menuRef} className="flex flex-col justify-center items-center gap-4 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px] p-4 absolute right-0 top-6 z-5 rounded-sm">
+                    <button
+                      onClick={() => DirectoryRename(dir._id, dir.dirname)}
+                      // className="rename-btn"
+                      className="w-[80%] hover:text-blue-700 outline-0 border-0"
+                    >
+                      Rename
+                    </button>
+                    <button
+                      onClick={() => DirDeleteHandler(dir._id)}
+                      // className="delete-btn"
+                      className="w-[80%] hover:text-blue-700 outline-0 "
+                    >
+                      Delete
+                    </button>
+                    <button
+                      onClick={() => DetailsButtonHandler(dir.dirname, breadcrumb, dir.TotalDirectorySize)}
+                      className="w-[80%] hover:text-blue-700 outline-0 "
+                    >
+                      Details
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
+            );
+          })}
+        </div>
+        <h1 className="bg-white text-lg w-[120px] rounded-sm text-center" style={{ padding: "4px" }}>Files</h1>
+        <div className=" flex flex-wrap justify-start gap-4" style={{ padding: "4px" }}>
+          {data.files.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Files Uploaded!</p>}
+          {data.files.map((file) => {
+            return (
+              <div key={file._id} className="file-item" style={{ width: "400px" }}>
+                <div className="folder-img-name" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
+                  <FileImage filename={file.fileName} />
+                  <p className="file-name">{file.fileName}</p>
 
-      {data.files.map((file) => {
-        return (
-          <div key={file._id} className="file-item">
-            <div className="folder-img-name" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
-              <FileImage filename={file.fileName} />
-              <p className="file-name">{file.fileName}</p>
+                  {/* <p className=" w-[100px]">{FileSizeCalculate(file.fileSize)}</p> */}
+                </div>
+                {
+                  details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} />
+                }
 
-              <p className=" w-[100px]">{FileSizeCalculate(file.fileSize)}</p>
-            </div>
-            {
-              details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} />
-            }
-
-            {/* <Link to={`/files/${file.id}`}>Open</Link> */}
-            <div onClick={() => toggleId(file._id)}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="24px"
-                viewBox="0 -960 960 960"
-                width="24px"
-                fill="#000000"
-              >
-                <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-              </svg>
-            </div>
-            {showMenu === file._id && (
-              <div ref={menuRef} className="flex flex-col justify-center items-center gap-2 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px]  absolute right-0 top-8 z-5 rounded-sm" >
-                <button
-                  className="w-[80%] hover:text-blue-700 outline-0 "
-                  onClick={() => DownloadHandler(file._id, file.fileName)}
-                >
-                  Download
-                </button>
-                <button
-                  className="w-[80%] hover:text-blue-700 outline-0 "
-                  onClick={() => RenameHandler(file.fileName, file._id)}
-                >
-                  Rename
-                </button>
-                <button
-                  className="w-[80%] hover:text-blue-700 outline-0 "
-                  onClick={() => DeleteHandler(file._id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="w-[80%] hover:text-blue-700 outline-0 "
-                  onClick={() => DetailsButtonHandler(file.fileName, breadcrumb, file.fileSize)}
-                >
-                  Details
-                </button>
+                {/* <Link to={`/files/${file.id}`}>Open</Link> */}
+                <div onClick={() => toggleId(file._id)}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    height="24px"
+                    viewBox="0 -960 960 960"
+                    width="24px"
+                    fill="#000000"
+                  >
+                    <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
+                  </svg>
+                </div>
+                {showMenu === file._id && (
+                  <div ref={menuRef} className="flex flex-col justify-center items-center gap-2 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px]  absolute right-0 top-8 z-5 rounded-sm" >
+                    <button
+                      className="w-[80%] hover:text-blue-700 outline-0 "
+                      onClick={() => DownloadHandler(file._id, file.fileName)}
+                    >
+                      Download
+                    </button>
+                    <button
+                      className="w-[80%] hover:text-blue-700 outline-0 "
+                      onClick={() => RenameHandler(file.fileName, file._id)}
+                    >
+                      Rename
+                    </button>
+                    <button
+                      className="w-[80%] hover:text-blue-700 outline-0 "
+                      onClick={() => DeleteHandler(file._id)}
+                    >
+                      Delete
+                    </button>
+                    <button
+                      className="w-[80%] hover:text-blue-700 outline-0 "
+                      onClick={() => DetailsButtonHandler(file.fileName, breadcrumb, file.fileSize)}
+                    >
+                      Details
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-          </div>
-        );
-      })}
-
-
-      {!isloading && !data.files.length && !data.directories.length && (
+            );
+          })}
+        </div>
+      </section>
+      {/* {!isloading && !data.files.length && !data.directories.length && (
         <div className="blank-message">
           <p>
             No files are uploaded here. upload your desired files and create
             directories.
           </p>
         </div>
-      )}
+      )} */}
 
 
 

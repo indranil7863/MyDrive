@@ -49,8 +49,7 @@
 }
 
 .folder-item {
-  width: 80%;
-  margin: auto;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -58,8 +57,6 @@
   padding: 5px 8px;
   background-color: #b5c5b8;
   position: relative;
-
-
 }
 
 .folder-img-name {
@@ -81,6 +78,7 @@
   width: 100%;
   overflow: auto;
   scrollbar-width: none;
+  white-space: nowrap;
 }
 
 .dir-name {
@@ -90,8 +88,7 @@
 }
 
 .file-item {
-  width: 80%;
-  margin: auto;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -166,8 +163,9 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   align-items: center;
+  background-color: #7fffd4;
 
 }
 
@@ -238,9 +236,9 @@
 .wrapper-banner-section {
   width: 100%;
   background-color: #f1ebeb;
-  position: sticky;
+  position: fixed;
   z-index: 8;
-  top: 48px;
+  top: 65px;
   display: flex;
   justify-content: center;
   padding: 5px 0px;
