@@ -392,7 +392,7 @@ const ShowContent = () => {
   }
 
   return (
-    <div className="bg-[#7fffd4] h-screen">
+    <div className=" h-screen">
       <div className="main-file-container">
         <div className="wrapper-banner-section">
           <div className="banner-section">
@@ -471,42 +471,47 @@ const ShowContent = () => {
           )) : "Home"}
         </div>
       </div>
-      <section className="bg-blue-300/20 flex flex-col gap-4 w-[80%] rounded-lg" style={{ margin: " 100px auto", padding: "10px " }}>
-        <h1 className="bg-white text-lg w-[120px] rounded-sm text-center" style={{ padding: " 4px" }}>Directories </h1>
+      <section className="flex flex-col gap-4 w-[80%] rounded-lg" style={{ margin: " 100px auto", padding: "10px " }}>
+
         <div className=" flex flex-wrap justify-start gap-4 " style={{ padding: "4px" }}>
 
           {data.directories.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Directories Created!</p>}
           {data.directories && data.directories.map((dir) => {
             return (
-              <div key={dir._id} className="folder-item" style={{ width: "200px" }}>
+              <div key={dir._id} className="folder-item" style={{ width: "200px", height: "200px" }}>
                 <div
                   onClick={() => OpenDirectory(dir._id)}
                   className="folder-img-name"
                 >
-                  <img
-                    src="https://img.icons8.com/?size=100&id=74359&format=png&color=228BE6"
-                    alt=""
-                    className="folder-img"
-                  />
-                  <p className="dir-name">{dir.dirname}</p>
+                  <div>
+                    <img
+                      src="https://img.icons8.com/?size=100&id=74359&format=png&color=228BE6"
+                      alt=""
+                      className="folder-img"
+                    />
+                    <div onClick={() => toggleId(dir._id)}>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div>
+                    <p className="dir-name">{dir.dirname}</p>
+                    <p className=" w-[100px]">{FileSizeCalculate(dir.TotalDirectorySize)}</p>
+                  </div>
 
-                  {/* <p className=" w-[100px]">{FileSizeCalculate(dir.TotalDirectorySize)}</p> */}
                 </div>
                 {
                   details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} isdirectory={true} />
                 }
 
-                <div onClick={() => toggleId(dir._id)}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#000000"
-                  >
-                    <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                  </svg>
-                </div>
+
                 {showMenu === dir._id && (
                   <div ref={menuRef} className="flex flex-col justify-center items-center gap-4 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px] p-4 absolute right-0 top-6 z-5 rounded-sm">
                     <button
@@ -535,7 +540,7 @@ const ShowContent = () => {
             );
           })}
         </div>
-        <h1 className="bg-white text-lg w-[120px] rounded-sm text-center" style={{ padding: "4px" }}>Files</h1>
+
         <div className=" flex flex-wrap justify-start gap-4" style={{ padding: "4px" }}>
           {data.files.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Files Uploaded!</p>}
           {data.files.map((file) => {
