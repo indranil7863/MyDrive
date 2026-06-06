@@ -55,16 +55,17 @@
   align-items: center;
   border-radius: 5px;
   padding: 5px 8px;
-  background-color: #b5c5b8;
+  background-color: rgb(255, 250, 250);
   position: relative;
+
 }
 
 .folder-img-name {
   display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-  width: 90%;
+  flex-direction: column;
+  width: 200px;
+  height: 200px;
+  padding: 4px;
   gap: 10px;
 }
 
@@ -93,8 +94,8 @@
   justify-content: space-between;
   align-items: center;
   border-radius: 5px;
-  padding: 5px 8px;
-  background: #e5ebe9;
+  /* padding: 5px 8px; */
+  background: white;
   position: relative;
 }
 

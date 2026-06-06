@@ -392,7 +392,7 @@ const ShowContent = () => {
   }
 
   return (
-    <div className=" h-screen">
+    <div className=" bg-gray-300 h-full">
       <div className="main-file-container">
         <div className="wrapper-banner-section">
           <div className="banner-section">
@@ -478,18 +478,22 @@ const ShowContent = () => {
           {data.directories.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Directories Created!</p>}
           {data.directories && data.directories.map((dir) => {
             return (
-              <div key={dir._id} className="folder-item" style={{ width: "200px", height: "200px" }}>
+              <div key={dir._id} className="folder-item hover:cursor-pointer" style={{ width: "200px", height: "200px" }}>
                 <div
                   onClick={() => OpenDirectory(dir._id)}
-                  className="folder-img-name"
+                  className="h-full w-full flex flex-col gap-4"
+                  style={{ padding: "4px" }}
                 >
-                  <div>
+                  <div className=" flex justify-between " style={{ padding: "5px 10px" }}>
                     <img
                       src="https://img.icons8.com/?size=100&id=74359&format=png&color=228BE6"
                       alt=""
                       className="folder-img"
                     />
-                    <div onClick={() => toggleId(dir._id)}>
+                    <div className="w-8 text-center" onClick={(e) => {
+                      toggleId(dir._id)
+                      e.stopPropagation()
+                    }}>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         height="24px"
@@ -501,10 +505,13 @@ const ShowContent = () => {
                       </svg>
                     </div>
                   </div>
-                  <div>
-                    <p className="dir-name">{dir.dirname}</p>
-                    <p className=" w-[100px]">{FileSizeCalculate(dir.TotalDirectorySize)}</p>
+                  <p className="bg-gray-200 w-[60px] text-center rounded-lg text-sm">Folder</p>
+                  <p className="dir-name text-lg font-semibold">{dir.dirname}</p>
+                  <div className="flex justify-between " style={{}}>
+                    <p>Size</p>
+                    <p>{FileSizeCalculate(dir.TotalDirectorySize)}</p>
                   </div>
+
 
                 </div>
                 {
@@ -545,29 +552,39 @@ const ShowContent = () => {
           {data.files.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Files Uploaded!</p>}
           {data.files.map((file) => {
             return (
-              <div key={file._id} className="file-item" style={{ width: "400px" }}>
-                <div className="folder-img-name" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
-                  <FileImage filename={file.fileName} />
-                  <p className="file-name">{file.fileName}</p>
+              <div key={file._id} className="file-item rounded-lg" style={{ width: "200px", height: "200px" }}>
+                <div className="folder-img-name rounded-lg hover:cursor-pointer" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
+                  <div className="flex justify-between items-center" style={{ padding: "5px 10px" }}>
+                    <FileImage filename={file.fileName} />
+                    <div onClick={(e) => {
+                      toggleId(file._id);
+                      e.stopPropagation()
+                    }} >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="24px"
+                        viewBox="0 -960 960 960"
+                        width="24px"
+                        fill="#000000"
+                      >
+                        <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <p className="bg-gray-200 w-[60px] text-center rounded-lg text-sm">{file.extension.slice(1)}</p>
+                  <p className="file-name text-lg font-semibold">{file.fileName}</p>
+                  <div className="flex justify-between">
+                    <p>Size</p>
+                    <p>{FileSizeCalculate(file.fileSize)}</p>
+                  </div>
 
-                  {/* <p className=" w-[100px]">{FileSizeCalculate(file.fileSize)}</p> */}
                 </div>
                 {
                   details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} />
                 }
 
                 {/* <Link to={`/files/${file.id}`}>Open</Link> */}
-                <div onClick={() => toggleId(file._id)}>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="24px"
-                    viewBox="0 -960 960 960"
-                    width="24px"
-                    fill="#000000"
-                  >
-                    <path d="M480-160q-33 0-56.5-23.5T400-240q0-33 23.5-56.5T480-320q33 0 56.5 23.5T560-240q0 33-23.5 56.5T480-160Zm0-240q-33 0-56.5-23.5T400-480q0-33 23.5-56.5T480-560q33 0 56.5 23.5T560-480q0 33-23.5 56.5T480-400Zm0-240q-33 0-56.5-23.5T400-720q0-33 23.5-56.5T480-800q33 0 56.5 23.5T560-720q0 33-23.5 56.5T480-640Z" />
-                  </svg>
-                </div>
+
                 {showMenu === file._id && (
                   <div ref={menuRef} className="flex flex-col justify-center items-center gap-2 bg-gray-200 border-2 border-purple-300 text-black w-[150px] h-[150px]  absolute right-0 top-8 z-5 rounded-sm" >
                     <button
