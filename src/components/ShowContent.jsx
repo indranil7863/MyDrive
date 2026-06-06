@@ -505,8 +505,9 @@ const ShowContent = () => {
                       </svg>
                     </div>
                   </div>
-                  <p className="bg-gray-200 w-[60px] text-center rounded-lg text-sm">Folder</p>
                   <p className="dir-name text-lg font-semibold">{dir.dirname}</p>
+                  <p className="bg-gray-200 w-[60px] text-center rounded-lg text-sm">Folder</p>
+
                   <div className="flex justify-between " style={{}}>
                     <p>Size</p>
                     <p>{FileSizeCalculate(dir.TotalDirectorySize)}</p>
@@ -555,7 +556,10 @@ const ShowContent = () => {
               <div key={file._id} className="file-item rounded-lg" style={{ width: "200px", height: "200px" }}>
                 <div className="folder-img-name rounded-lg hover:cursor-pointer" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
                   <div className="flex justify-between items-center" style={{ padding: "5px 10px" }}>
-                    <FileImage filename={file.fileName} />
+                    <div className="bg-gray-400/10 rounded-lg text-center" style={{ padding: "2px" }}>
+                      <FileImage filename={file.fileName} />
+                    </div>
+
                     <div onClick={(e) => {
                       toggleId(file._id);
                       e.stopPropagation()
@@ -571,8 +575,9 @@ const ShowContent = () => {
                       </svg>
                     </div>
                   </div>
-                  <p className="bg-gray-200 w-[60px] text-center rounded-lg text-sm">{file.extension.slice(1)}</p>
                   <p className="file-name text-lg font-semibold">{file.fileName}</p>
+                  <p className="bg-gray-200 w-[60px] text-center rounded-lg text-sm">{file.extension.slice(1).toUpperCase()}</p>
+
                   <div className="flex justify-between">
                     <p>Size</p>
                     <p>{FileSizeCalculate(file.fileSize)}</p>
