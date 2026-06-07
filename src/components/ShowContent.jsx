@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
-import profilepic from "../assets/user.png";
+
 import FileImage from "./FileImage";
 import Loading from "./Loading";
 import { toast } from 'react-toastify';
@@ -393,7 +393,7 @@ const ShowContent = () => {
   }
 
   return (
-    <div className=" bg-gray-300 h-full flex flex-col" style={{ marginTop: "10px" }}>
+    <div className=" bg-gray-300 h-full flex flex-col">
       <div className="main-file-container">
         <div className="wrapper-banner-section flex flex-col gap-2">
           <div>
@@ -419,12 +419,6 @@ const ShowContent = () => {
               <FolderPlus size={20} />
               <span className="text-sm">Create Directory</span>
             </button>
-
-            {/* <Link to="/profile" className="profile-wrapper">
-              <div className="profile-imgcontainer">
-                <img src={profilepic} alt="image" title="profile" />
-              </div>
-            </Link> */}
           </div>
           <div className="progress-bar" style={{ width: `${progress}%` }}></div>
         </div>
