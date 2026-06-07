@@ -97,7 +97,7 @@ const Register = () => {
     <div>
       <div className="register-wrapper"></div>
       <form onSubmit={SingupHandler} className="register-container">
-        <section className="register-sec1">
+        <section className="register-sec1 lg:w-[50%]">
           {/*  form section */}
           <div className="section1-name">
             <h2>Welcome Back</h2>
@@ -188,7 +188,7 @@ const Register = () => {
             </span>
           </div>
         </section>
-        <section className="register-sec2">
+        <section className="register-sec2 hidden lg:flex">
           {/* image section */}
           <img
             src="https://media.istockphoto.com/id/2208418091/photo/document-management-system-dms-folder-structure-and-classification-system-file-and-folder.jpg?s=612x612&w=0&k=20&c=3e3nvT--j6bNg4xzWc_tUTyhP27kfolxuVrF86u34Xk="

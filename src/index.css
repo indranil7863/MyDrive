@@ -387,7 +387,7 @@
 
 .register-container {
   position: absolute;
-  max-width: 70%;
+  min-width: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -420,7 +420,7 @@
 }
 
 .register-sec1 {
-  width: 50%;
+  /* width: 50%; */
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
