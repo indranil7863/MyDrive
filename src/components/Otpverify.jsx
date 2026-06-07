@@ -9,6 +9,7 @@ function Otpverify() {
     const navigate = useNavigate();
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [isloading, setIsLoading] = useState(false);
+    const [isloadingotp, setIsloadingOtp] = useState(false);
     const [iserror, setIsError] = useState(false);
     const [timer, setTimer] = useState(60);
 
@@ -82,7 +83,7 @@ function Otpverify() {
 
     async function ResendHandler() {
         try {
-            setIsLoading(true);
+            setIsloadingOtp(true);
             const response = await fetch(`${backend_url}/user/resendotp`, {
                 headers: {
                     "Content-Type": "application/json"
@@ -103,7 +104,7 @@ function Otpverify() {
             console.log("Error: ", error.message);
             toast.error("Network Error!");
         } finally {
-            setIsLoading(false);
+            setIsloadingOtp(false);
         }
     }
 
@@ -129,16 +130,9 @@ function Otpverify() {
                     }
                 </div>
                 {
-                    timer ? `${timer} sec` : (isloading ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : <button className="resend-btn" onClick={ResendHandler} >Resend OTP</button>)
+                    timer ? `${timer} sec` : (isloadingotp ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : <button className="resend-btn" onClick={ResendHandler} >Resend OTP</button>)
                 }
-
-
-
             </div>
-
-
-
-
         </section>
     )
 }
