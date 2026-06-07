@@ -393,7 +393,7 @@ const ShowContent = () => {
   }
 
   return (
-    <div className=" bg-gray-300 h-full flex flex-col">
+    <div className=" bg-gray-300 h-full flex flex-col gap-4">
       <div className="main-file-container">
         <div className="wrapper-banner-section flex flex-col gap-2">
           <div>
@@ -449,8 +449,8 @@ const ShowContent = () => {
       {
         isloading && (<div className="absolute top-[50%] left-[50%] z-10"><Loading /></div>)
       }
-      <div className=" w-[96%] flex justify-center " style={{ margin: "0px auto" }}>
-        <div className=" bg-gray-200 sm:rounded-xl  flex overflow-x-auto whitespace-nowrap scrollbar-none w-[80%] text-2xl font-bold text-blue-500 mx-auto" style={{ padding: "8px 20px" }}>
+      <div className=" w-[90%] flex justify-center " style={{ margin: "0px auto" }}>
+        <div className=" sm:rounded-xl bg-green-50 flex overflow-x-auto whitespace-nowrap scrollbar-none sm:w-[90%] w-full text-2xl font-bold text-blue-500 mx-auto" style={{ padding: "8px 20px" }}>
           {breadcrumb ? breadcrumb.map((dir, index) => (
             <span key={index} className=" text-center flex items-center" >
 
@@ -463,7 +463,7 @@ const ShowContent = () => {
           )) : <House color="gray" />}
         </div>
       </div>
-      <section className="flex flex-col gap-4 sm:w-[80%]  rounded-lg" style={{ margin: "0px auto", padding: "10px " }}>
+      <section className="flex flex-col gap-4 sm:w-[85%]  rounded-lg" style={{ margin: "0px auto", padding: "10px " }}>
         <div className=" flex flex-wrap justify-start gap-4 " style={{ padding: "4px" }}>
           {data.directories.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Directories Created!</p>}
           {data.directories && data.directories.map((dir) => {
