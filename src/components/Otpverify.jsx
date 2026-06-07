@@ -80,17 +80,46 @@ function Otpverify() {
 
     }
 
+    async function ResendHandler() {
+        try {
+            setIsLoading(true);
+            const response = await fetch(`${backend_url}/user/resendotp`, {
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include"
+            })
+            if (response.status === 200) {
+                setTimer(60);
+            } else if (response.status === 500) {
+                toast.error("Session is expired!");
+                navigate("/register");
+            }
+            else {
+                toast.error("Unable to send the OTP!")
+            }
+
+        } catch (error) {
+            console.log("Error: ", error.message);
+            toast.error("Network Error!");
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
 
     return (
         <section className="otp-section">
 
             <div className="otp-div">
-                <div>
-                    {
-                        otp.map((digit, index) => (
-                            <input className="input-ele" ref={(ele) => inputRef.current[index] = ele} key={index} type="text" inputMode="numeric" value={digit} onChange={(e) => changeHandler(e.target.value, index)} onKeyDown={(e) => handleKeyDown(e, index)} />
-                        ))
-                    }
+                <div className=" w-[98%] flex flex-col justify-center sm:flex-row gap-4" style={{ padding: "4px" }}>
+                    <div className="flex justify-center">
+                        {
+                            otp.map((digit, index) => (
+                                <input className="input-ele w-[40px] h-[40px] sm:w-[50px] sm:h-[50px]" ref={(ele) => inputRef.current[index] = ele} key={index} type="text" inputMode="numeric" value={digit} onChange={(e) => changeHandler(e.target.value, index)} onKeyDown={(e) => handleKeyDown(e, index)} />
+                            ))
+                        }
+                    </div>
                     <button className="verify-btn" onClick={handleVerify}>{isloading ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : "Verify"}</button>
 
                 </div>
@@ -100,7 +129,7 @@ function Otpverify() {
                     }
                 </div>
                 {
-                    timer ? `${timer} sec` : (<button className="resend-btn">Resend OTP</button>)
+                    timer ? `${timer} sec` : (isloading ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : <button className="resend-btn" onClick={ResendHandler} >Resend OTP</button>)
                 }
 
 

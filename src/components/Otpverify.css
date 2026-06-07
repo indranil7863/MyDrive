@@ -1,8 +1,13 @@
 .otp-section {
     border: 1px solid red;
     width: 100%;
-    height: 90vh;
-    position: relative;
+    height: 100%;
+    position: absolute;
+    padding: 10px;
+    background-color: gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .otp-div {
@@ -11,10 +16,9 @@
     height: 100%;
     max-width: 500px;
     width: 100%;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+
+
+
     display: flex;
     padding: 0 10px;
     justify-content: center;
@@ -27,10 +31,7 @@
 }
 
 .input-ele {
-    max-width: 50px;
-    width: 100%;
-    max-height: 50px;
-    height: 100%;
+
     text-align: center;
     border-radius: 5px;
     border: 1px solid blue;
@@ -54,7 +55,8 @@
 }
 
 .verify-btn {
-    margin-left: 15px;
+    width: 50%;
+    margin: auto;
     padding: 10px 20px;
     border-radius: 5px;
     border: none;
