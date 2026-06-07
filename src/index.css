@@ -49,7 +49,8 @@
 }
 
 .folder-item {
-
+  height: 180px;
+  width: 180px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -57,16 +58,35 @@
   padding: 5px 8px;
   background-color: rgb(255, 250, 250);
   position: relative;
+}
 
+@media (min-width: 640px) {
+
+  /* Your custom CSS rules for sm and upper screens go here */
+  .folder-item {
+    width: 200px;
+    height: 200px;
+
+  }
 }
 
 .folder-img-name {
   display: flex;
   flex-direction: column;
-  width: 200px;
-  height: 200px;
+  width: 180px;
+  height: 180px;
   padding: 4px;
   gap: 10px;
+}
+
+@media (min-width: 640px) {
+
+  /* Your custom CSS rules for sm and upper screens go here */
+  .folder-img-name {
+    width: 200px;
+    height: 200px;
+
+  }
 }
 
 .files-image {
@@ -81,6 +101,7 @@
   scrollbar-width: none;
   white-space: nowrap;
 }
+
 
 .dir-name {
   width: 100%;
@@ -163,13 +184,10 @@
 .main-file-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
   margin-bottom: 10px;
   align-items: center;
-  background-color: #7fffd4;
-
 }
-
 
 /* /file upload */
 
@@ -179,14 +197,15 @@
   flex-direction: row;
   gap: 10px;
   align-items: center;
-  width: 100px;
+  width: 150px;
   border-radius: 5px;
-  padding: 5px 8px;
+  padding: 12px 10px;
   background-color: rgb(43, 107, 226);
   color: white;
 }
 
 .create-folder {
+  width: 200px;
   display: flex;
   justify-content: center;
   flex-direction: row;
@@ -194,29 +213,20 @@
   gap: 8px;
   border-radius: 5px;
   border: none;
-  padding: 5px 8px;
+  padding: 8px 10px;
+  background-color: aqua;
 }
 
 .banner-section {
   width: 80%;
-  margin: auto;
+  margin: 0px auto;
+
   display: flex;
-  flex-direction: row;
-  /* justify-content: flex-start; */
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  padding: 2px 0;
-  background-color: #f1ebeb;
+  justify-content: center;
+  gap: 10px;
 }
 
-.banner-firstdiv {
-  width: 50%;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 20px;
-}
+
 
 .profile-imgcontainer {
   display: flex;
@@ -230,14 +240,16 @@
 .profile-imgcontainer img {
   width: 30px;
   height: 30px;
-
   border-radius: 50%;
 }
 
 .wrapper-banner-section {
-  width: 100%;
-  background-color: #f1ebeb;
-  position: fixed;
+  width: 96%;
+  background-color: #ffffff;
+  border: 3px dotted rgb(181, 179, 179);
+  border-radius: 6px;
+  /* background-color: greenyellow; */
+  height: 236px;
   z-index: 8;
   top: 65px;
   display: flex;

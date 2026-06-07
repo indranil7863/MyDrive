@@ -6,6 +6,7 @@ import Loading from "./Loading";
 import { toast } from 'react-toastify';
 import ContentDetails from "./ContentDetails";
 import { FileSizeCalculate } from "../utils/FileSizeCalculate.js";
+import { Upload, FolderPlus, House } from 'lucide-react'
 
 
 const ShowContent = () => {
@@ -392,43 +393,38 @@ const ShowContent = () => {
   }
 
   return (
-    <div className=" bg-gray-300 h-full">
+    <div className=" bg-gray-300 h-full flex flex-col" style={{ marginTop: "10px" }}>
       <div className="main-file-container">
-        <div className="wrapper-banner-section">
+        <div className="wrapper-banner-section flex flex-col gap-2">
+          <div>
+            <Upload size={40} color="gray" />
+          </div>
+          <p className="font-bold text-lg">Upload Files or Create Directory</p>
+          <p className="font-light text-gray-500">Drag and drop files here, or click to select files</p>
           <div className="banner-section">
-            <div className="banner-firstdiv">
-              <label htmlFor="fileupload">
-                <div className="upload-file">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    className="bi bi-upload"
-                    viewBox="0 0 16 16"
-                  >
-                    <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5" />
-                    <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z" />
-                  </svg>
-                  <span>Upload</span>
-                </div>
-                <input
-                  onChange={UploadFileHandler}
-                  type="file"
-                  id="fileupload"
-                  style={{ display: "none" }}
-                />
-              </label>
-              <button onClick={CreateDirectroyHandler} className="create-folder">
-                <span class="material-symbols-outlined">create_new_folder</span>
-                <span>Create </span>
-              </button>
-            </div>
-            <Link to="/profile" className="profile-wrapper">
+
+            <label htmlFor="fileupload">
+              <div className="upload-file">
+                <Upload size={20} />
+                <span className="text-sm">Upload File</span>
+              </div>
+              <input
+                onChange={UploadFileHandler}
+                type="file"
+                id="fileupload"
+                style={{ display: "none" }}
+              />
+            </label>
+            <button onClick={CreateDirectroyHandler} className="create-folder">
+              <FolderPlus size={20} />
+              <span className="text-sm">Create Directory</span>
+            </button>
+
+            {/* <Link to="/profile" className="profile-wrapper">
               <div className="profile-imgcontainer">
                 <img src={profilepic} alt="image" title="profile" />
               </div>
-            </Link>
+            </Link> */}
           </div>
           <div className="progress-bar" style={{ width: `${progress}%` }}></div>
         </div>
@@ -459,26 +455,26 @@ const ShowContent = () => {
       {
         isloading && (<div className="absolute top-[50%] left-[50%] z-10"><Loading /></div>)
       }
-      <div className="w-full flex justify-center fixed z-5 bg-gray-200 bg-amber-300" style={{ marginTop: "40px" }}>
+      <div className=" w-[96%] flex justify-center " style={{ margin: "0px auto" }}>
         <div className=" bg-gray-200 sm:rounded-xl  flex overflow-x-auto whitespace-nowrap scrollbar-none w-[80%] text-2xl font-bold text-blue-500 mx-auto" style={{ padding: "8px 20px" }}>
           {breadcrumb ? breadcrumb.map((dir, index) => (
-            <span key={index}>
+            <span key={index} className=" text-center flex items-center" >
 
-              {index !== 0 && <span className=" text-black px-2 w-4 inline-block text-center">{" > "}</span>}
+              {index !== 0 && <span className=" text-black px-2 w-4 inline-block text-center" style={{ padding: "0px 10px", width: "31px" }}>{" > "}</span>}
+              <div className="text-xl flex items-center">
+                {dir === "root" ? <><House color="gray" /><span className="text-2xl italic text-gray-400" style={{ padding: "0px 4px" }}></span></> : dir}
+              </div>
 
-              {dir === "root" ? "Home" : dir}
             </span>
-          )) : "Home"}
+          )) : <House color="gray" />}
         </div>
       </div>
-      <section className="flex flex-col gap-4 w-[80%] rounded-lg" style={{ margin: " 100px auto", padding: "10px " }}>
-
+      <section className="flex flex-col gap-4 sm:w-[80%]  rounded-lg" style={{ margin: "0px auto", padding: "10px " }}>
         <div className=" flex flex-wrap justify-start gap-4 " style={{ padding: "4px" }}>
-
           {data.directories.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Directories Created!</p>}
           {data.directories && data.directories.map((dir) => {
             return (
-              <div key={dir._id} className="folder-item hover:cursor-pointer" style={{ width: "200px", height: "200px" }}>
+              <div key={dir._id} className="folder-item hover:cursor-pointer" >
                 <div
                   onClick={() => OpenDirectory(dir._id)}
                   className="h-full w-full flex flex-col gap-4"
@@ -553,7 +549,7 @@ const ShowContent = () => {
           {data.files.length === 0 && <p className="text-center w-full italic text-gray-950/40">No Files Uploaded!</p>}
           {data.files.map((file) => {
             return (
-              <div key={file._id} className="file-item rounded-lg" style={{ width: "200px", height: "200px" }}>
+              <div key={file._id} className="file-item rounded-lg" >
                 <div className="folder-img-name rounded-lg hover:cursor-pointer" onClick={() => navigate(`/file/${file._id}`, { state: file })}>
                   <div className="flex justify-between items-center" style={{ padding: "5px 10px" }}>
                     <div className="bg-gray-400/10 rounded-lg text-center" style={{ padding: "2px" }}>
@@ -635,31 +631,35 @@ const ShowContent = () => {
 
 
 
-      {isRename && (
-        <div className="dialog-box">
-          Re-Name:{" "}
-          <input
-            ref={inputRef}
-            type="text"
-            value={newFileName}
-            onChange={(e) => setNewFileName(e.target.value)}
-          />
-          <button onClick={SaveHandler}>Save</button>
-        </div>
-      )}
-      {isRenameDir && (
-        <div className="dialog-box">
-          Re-Name:{" "}
-          <input
-            ref={inputRef}
-            type="text"
-            value={renameDir}
-            onChange={(e) => setRenameDir(e.target.value)}
-          />
-          <button onClick={DirSaveHandler}>Save</button>
-        </div>
-      )}
-    </div>
+      {
+        isRename && (
+          <div className="dialog-box">
+            Re-Name:{" "}
+            <input
+              ref={inputRef}
+              type="text"
+              value={newFileName}
+              onChange={(e) => setNewFileName(e.target.value)}
+            />
+            <button onClick={SaveHandler}>Save</button>
+          </div>
+        )
+      }
+      {
+        isRenameDir && (
+          <div className="dialog-box">
+            Re-Name:{" "}
+            <input
+              ref={inputRef}
+              type="text"
+              value={renameDir}
+              onChange={(e) => setRenameDir(e.target.value)}
+            />
+            <button onClick={DirSaveHandler}>Save</button>
+          </div>
+        )
+      }
+    </div >
   );
 };
 
