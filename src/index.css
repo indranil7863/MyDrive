@@ -245,7 +245,7 @@
 
 .wrapper-banner-section {
   width: 98%;
-  background-color: #ffffff;
+
   border: 3px dotted rgb(181, 179, 179);
   border-radius: 6px;
   /* background-color: greenyellow; */
@@ -570,7 +570,8 @@
 .progress-bar {
   border: 2px solid green;
   width: 100vw;
-  position: absolute;
-  bottom: -5px;
-  left: -2px;
+  position: fixed;
+  /* bottom: -5px; */
+  top: 61px;
+  left: -4px;
 }

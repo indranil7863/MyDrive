@@ -31,6 +31,10 @@ const ShowContent = () => {
   const [directoryFlow, setDirectoryFlow] = useState("root");
   const [details, setDetails] = useState(false);
   const directoryFLowRef = useRef("Root");
+  // for drag and drop
+  const [dragFile, setDragFile] = useState(null);
+  const [isdragover, setIsDragOver] = useState(false);
+
 
   // const [editing, setEditing] = useState(true);
   const inputRef = useRef(null);
@@ -138,6 +142,8 @@ const ShowContent = () => {
     }
   }
 
+
+
   // fetch directory data
   async function FetchData() {
     try {
@@ -191,7 +197,15 @@ const ShowContent = () => {
 
   // file upload
   async function UploadFileHandler(e) {
-    const File = e.target.files[0];
+    let File;
+    if (e.type === "change") {
+      File = e.target.files[0];
+    }
+    else if (e.type === "drop") {
+      File = e.dataTransfer.files[0];
+    }
+
+    console.log("File: ", File);
 
     if (!File) return;
     const tempItem = {
@@ -392,10 +406,24 @@ const ShowContent = () => {
     setCurrentDetails((prev) => ({ ...prev, filename: fileName, filesize: filesize, breadcrumb: breadcrumb }));
   }
 
+  function handleDragOver(e) {
+    e.preventDefault();
+    setIsDragOver(true);
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    console.log(e.dataTransfer.files[0])
+    console.log("uploading drag & Drop File!");
+    UploadFileHandler(e);
+    setIsDragOver(false);
+  }
+
+
   return (
-    <div className=" bg-gray-300 h-full flex flex-col gap-4">
+    <div className={`min-h-screen flex flex-col gap-4 bg-gray-300`}>
       <div className="main-file-container">
-        <div className="wrapper-banner-section flex flex-col gap-2">
+        <div className={`wrapper-banner-section flex flex-col gap-2 ${isdragover ? "bg-gray-500" : "bg-[#ffffff]"}`} onDragOver={handleDragOver} onDrop={handleDrop} onDragLeave={() => setIsDragOver(false)}>
           <div>
             <Upload size={40} color="gray" />
           </div>
@@ -420,9 +448,8 @@ const ShowContent = () => {
               <span className="text-sm">Create Directory</span>
             </button>
           </div>
-          <div className="progress-bar" style={{ width: `${progress}%` }}></div>
+          <div className="progress-bar bg-green-700" style={{ width: `${progress}%` }}></div>
         </div>
-
       </div>
 
       {isCreatFolder && (
@@ -453,12 +480,10 @@ const ShowContent = () => {
         <div className=" sm:rounded-xl bg-green-50 flex overflow-x-auto whitespace-nowrap scrollbar-none sm:w-[90%] w-full text-2xl font-bold text-blue-500 mx-auto" style={{ padding: "8px 20px" }}>
           {breadcrumb ? breadcrumb.map((dir, index) => (
             <span key={index} className=" text-center flex items-center" >
-
               {index !== 0 && <span className=" text-black px-2 w-4 inline-block text-center" style={{ padding: "0px 10px", width: "31px" }}>{" > "}</span>}
               <div className="text-xl flex items-center">
                 {dir === "root" ? <><House color="gray" /><span className="text-2xl italic text-gray-400" style={{ padding: "0px 4px" }}></span></> : dir}
               </div>
-
             </span>
           )) : <House color="gray" />}
         </div>
