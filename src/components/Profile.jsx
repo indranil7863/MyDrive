@@ -13,6 +13,11 @@ const Profile = () => {
   const [userData, setUserData] = useState({});
   const [isloading, setIsLoading] = useState(false);
 
+  const [mount, setMount] = useState(false)
+  useEffect(() => {
+    setMount(true);
+  }, [])
+
   async function FetchData() {
     try {
       const response = await fetch(`${backend_url}/user/profile`, {
