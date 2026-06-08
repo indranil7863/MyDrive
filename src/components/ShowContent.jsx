@@ -419,7 +419,6 @@ const ShowContent = () => {
     setIsDragOver(false);
   }
 
-
   return (
     <div className={`min-h-screen flex flex-col gap-4 bg-gray-300`}>
       <div className="main-file-container">
