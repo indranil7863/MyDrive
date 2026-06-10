@@ -34,6 +34,7 @@ const ShowContent = () => {
   // for drag and drop
   const [dragFile, setDragFile] = useState(null);
   const [isdragover, setIsDragOver] = useState(false);
+  const [selectFile, setSelectFile] = useState(null);
 
 
   // const [editing, setEditing] = useState(true);
@@ -418,9 +419,24 @@ const ShowContent = () => {
     UploadFileHandler(e);
     setIsDragOver(false);
   }
+  const closemenuRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (closemenuRef.current && !closemenuRef.current.contains(e.target)) {
+        console.log("clicked");
+        setDetails(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [])
 
   return (
-    <div className={`min-h-screen flex flex-col gap-4 bg-gray-300`}>
+    <div className={`min-h-screen flex flex-col gap-4 bg-gray-300`} >
       <div className="main-file-container">
         <div className={`wrapper-banner-section flex flex-col gap-2 ${isdragover ? "bg-gray-500" : "bg-[#ffffff]"}`} onDragOver={handleDragOver} onDrop={handleDrop} onDragLeave={() => setIsDragOver(false)}>
           <div>
@@ -529,9 +545,6 @@ const ShowContent = () => {
 
 
                 </div>
-                {
-                  details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} isdirectory={true} />
-                }
 
 
                 {showMenu === dir._id && (
@@ -598,9 +611,7 @@ const ShowContent = () => {
                   </div>
 
                 </div>
-                {
-                  details && <ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} />
-                }
+
 
                 {/* <Link to={`/files/${file.id}`}>Open</Link> */}
 
@@ -625,6 +636,7 @@ const ShowContent = () => {
                       Delete
                     </button>
                     <button
+
                       className="w-[80%] hover:text-blue-700 outline-0 "
                       onClick={() => DetailsButtonHandler(file.fileName, breadcrumb, file.fileSize)}
                     >
@@ -637,17 +649,9 @@ const ShowContent = () => {
           })}
         </div>
       </section>
-      {/* {!isloading && !data.files.length && !data.directories.length && (
-        <div className="blank-message">
-          <p>
-            No files are uploaded here. upload your desired files and create
-            directories.
-          </p>
-        </div>
-      )} */}
-
-
-
+      {
+        details && <div ref={closemenuRef}><ContentDetails details={details} setDetails={setDetails} filename={currentDetails.filename} filesize={currentDetails.filesize} breadcrumb={currentDetails.breadcrumb} /></div>
+      }
 
       {
         isRename && (
