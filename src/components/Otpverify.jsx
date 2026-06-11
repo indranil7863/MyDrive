@@ -110,30 +110,32 @@ function Otpverify() {
 
 
     return (
-        <section className="otp-section">
+        <div>
+            <div className="absolute w-full bg-[#c2caca] opacity-[0.6] top-0 z-20 h-full"></div>
+            <section className="otp-section">
+                <div className="otp-div">
+                    <div className=" w-[98%] flex flex-col justify-center sm:flex-row gap-4" style={{ padding: "4px" }}>
+                        <div className="flex justify-center">
+                            {
+                                otp.map((digit, index) => (
+                                    <input className="input-ele w-[40px] h-[40px] sm:w-[50px] sm:h-[50px]" ref={(ele) => inputRef.current[index] = ele} key={index} type="text" inputMode="numeric" value={digit} onChange={(e) => changeHandler(e.target.value, index)} onKeyDown={(e) => handleKeyDown(e, index)} />
+                                ))
+                            }
+                        </div>
+                        <button className="verify-btn" onClick={handleVerify}>{isloading ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : "Verify"}</button>
 
-            <div className="otp-div">
-                <div className=" w-[98%] flex flex-col justify-center sm:flex-row gap-4" style={{ padding: "4px" }}>
-                    <div className="flex justify-center">
+                    </div>
+                    <div>
                         {
-                            otp.map((digit, index) => (
-                                <input className="input-ele w-[40px] h-[40px] sm:w-[50px] sm:h-[50px]" ref={(ele) => inputRef.current[index] = ele} key={index} type="text" inputMode="numeric" value={digit} onChange={(e) => changeHandler(e.target.value, index)} onKeyDown={(e) => handleKeyDown(e, index)} />
-                            ))
+                            iserror && <div className="text-red-500 text-start">please fill in all blanks!</div>
                         }
                     </div>
-                    <button className="verify-btn" onClick={handleVerify}>{isloading ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : "Verify"}</button>
-
-                </div>
-                <div>
                     {
-                        iserror && <div className="text-red-500 text-start">please fill in all blanks!</div>
+                        timer ? `${timer} sec` : (isloadingotp ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : <button className="resend-btn" onClick={ResendHandler} >Resend OTP</button>)
                     }
                 </div>
-                {
-                    timer ? `${timer} sec` : (isloadingotp ? <div className=" h-[25px] w-[25px] border-2 border-l-0 rounded-full animate-spin"></div> : <button className="resend-btn" onClick={ResendHandler} >Resend OTP</button>)
-                }
-            </div>
-        </section>
+            </section>
+        </div>
     )
 }
 

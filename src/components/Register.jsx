@@ -10,8 +10,8 @@ const Register = () => {
   const navigate = useNavigate();
   const [inputData, setInputData] = useState({
     name: "",
-    email: "indranilbera542@gmail.com",
-    password: "Indranil",
+    email: "",
+    password: "",
   });
   const [issignin, setIsSignIn] = useState(true);
   const [errorData, setErrorData] = useState("");
