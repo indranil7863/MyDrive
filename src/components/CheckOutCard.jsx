@@ -3,8 +3,8 @@ import { toast } from 'react-toastify'
 
 function CheckOutCard({ open, setOpen, plandetails }) {
   const backend_url = import.meta.env.VITE_BACKEND_URL;
-  const [name, setName] = useState("Indranil bera");
-  const [mobile, setMobile] = useState("7863934256");
+  const [name, setName] = useState("");
+  const [mobile, setMobile] = useState("");
   const [touched, setTouched] = useState({ name: false, mobile: false });
   const modalRef = useRef(null);
 
@@ -89,9 +89,10 @@ function CheckOutCard({ open, setOpen, plandetails }) {
     >
       <div
         ref={modalRef}
-        className="w-full max-w-lg rounded-2xl bg-white dark:bg-gray-900 shadow-xl border border-gray-200 dark:border-gray-800"
+        style={{ padding: "8px 10px" }}
+        className="w-full max-w-lg flex flex-col gap-6  rounded-2xl bg-white dark:bg-gray-900 shadow-xl border border-gray-200 dark:border-gray-800"
       >
-        <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-800">
+        <div className="flex items-center justify-between p-5 border-b border-gray-200 dark:border-gray-800" >
           <h2
             id="checkout-title"
             className="text-xl font-semibold text-gray-900 dark:text-white"
@@ -107,7 +108,7 @@ function CheckOutCard({ open, setOpen, plandetails }) {
           </button>
         </div>
 
-        <div className="p-5 space-y-5">
+        <div className="p-5 space-y-5  flex flex-col gap-5">
           {/* Course summary */}
           <div className="flex items-center gap-4">
             {/* <img
@@ -132,8 +133,8 @@ function CheckOutCard({ open, setOpen, plandetails }) {
           </div>
 
           {/* Form */}
-          <div className="space-y-4">
-            <div>
+          <div className="space-y-4 flex flex-col gap-4">
+            <div className=''>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                 Full Name
               </label>
